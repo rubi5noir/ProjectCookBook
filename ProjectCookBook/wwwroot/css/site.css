@@ -1,22 +1,166 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
+/* Body */
+html,
 body {
-  margin-bottom: 60px;
+    overflow-x: visible;
+    background-color: var(--Body_Background_Color);
+}
+
+header {
+    height: 85px;
+}
+
+
+h1 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+    /* Label */
+    h1.Label_Zones_Accueil {
+        display: block;
+        background-color: var(--Label_Zones_Accueil_Background_Color);
+        height: 5vh;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: xx-large;
+        border-bottom: var(--Label_Zones_Accueil_Border_Bottom) solid;
+        border-left: var(--Header_Border_Color) solid;
+        border-right: var(--Header_Border_Color) solid;
+        border-top: var(--Header_Border_Color) solid;
+    }
+
+    h1#Label_My_Recipes {
+        border-top: none;
+    }
+
+/* Zone Vignette Recipe */
+div.Vignette_Recipes {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow-x: hidden;
+}
+
+/* Recipe Icon (Book) */
+div.Recipe_Book {
+    margin-left: 5px;
+    width: 150px;
+    height: 100%;
+    flex-shrink: 0;
+    position: relative;
+    width: 150px;
+    height: 200px;
+    background-color: var(--Recipe_Book_Background_Color);
+    background-image: var(--Recipe_Book_Background_Image);
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.Recipe_Book img {
+    display: var(--Display_Image);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+
+.Rating {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: gold;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+h3 {
+    position: absolute;
+    top: -2px;
+    left: 45px;
+    font-size: 16px;
+    color: white;
+    text-shadow: 1px 2px 2px black;
+    z-index: 10;
+}
+
+
+div.Recipe_Book:hover {
+    scale: 1.05;
+}
+
+div.Vignette_Recipes .Recipe_Book {
+    height: 25vh;
+    margin: 5px;
+}
+
+.Recipe_Book h2 {
+    position: absolute;
+    bottom: 10px;
+    font-size: 16px;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0);
+    /* Fond transparent */
+    backdrop-filter: blur(10px);
+    padding: 1px 5px;
+    border-radius: 5px;
+}
+
+h2 {
+    font-size: medium;
+}
+
+
+/* Themes */
+
+.Light {
+    --Body_Background_Color: slategrey;
+    --Header_Background_Color: rgba(255, 255, 255, 0.933);
+    --Header_Border_Color: black;
+    --Span_Color: #000000;
+    --Menu_Burger_Font_Color: black;
+    --Label_Zones_Accueil_Background_Color: rgba(255, 255, 255, 0.933);
+    --Label_Zones_Accueil_Border_Bottom: rgb(212, 212, 212);
+    --Recipe_Categorie_Background_Color: rgb(174, 114, 9);
+    --Recipe_Book_Background_Color: rgb(98, 97, 97);
+    --Recipe_Book_Background_Image: none;
+    --Display_Image: block;
+    --Header_Border_Color: black;
+    --Div_Background_Color: rgba(255, 255, 255, 0.933);
+}
+
+.Dark {
+    --Body_Background_Color: slategrey;
+    --Header_Background_Color: gray;
+    --Header_Border_Color: black;
+    --Span_Color: #FFF;
+    --Menu_Burger_Font_Color: black;
+    --Label_Zones_Accueil_Background_Color: gray;
+    --Label_Zones_Accueil_Border_Bottom: rgb(90, 90, 90);
+    --Recipe_Categorie_Background_Color: rgb(174, 114, 9);
+    --Recipe_Book_Background_Color: rgb(52, 52, 52);
+    --Recipe_Book_Background_Image: none;
+    --Display_Image: block;
+    --Header_Border_Color: black;
+    --Div_Background_Color: gray;
+}
+
+.Rubisnoir {
+    --Body_Background_Color: slategrey;
+    --Header_Background_Color: rgb(167, 15, 15);
+    --Header_Border_Color: rgb(0, 0, 0);
+    --Span_Color: #000000;
+    --Menu_Burger_Font_Color: black;
+    --Label_Zones_Accueil_Background_Color: rgb(167, 15, 15);
+    --Label_Zones_Accueil_Border_Bottom: gold;
+    --Recipe_Categorie_Background_Color: rgb(174, 114, 9);
+    --Recipe_Book_Background_Color: none;
+    --Recipe_Book_Background_Image: url(/Main/Test_Cover_Book_Recipe.png);
+    --Display_Image: none;
+    --Header_Border_Color: black;
+    --Div_Background_Color: rgb(167, 15, 15);
 }

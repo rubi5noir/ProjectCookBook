@@ -10,35 +10,71 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ProjectCookBook</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
+
+        <div id="Header" class="Header">
+
+            <div id="Header_Search_Bar">
+                <input type="search" name="Search_Recipe" id="Search_Recipe">
+                <label for="Search_Recipe"><button id="Search_Recipe_Button">Rechercher</button></label>
             </div>
-        </nav>
+
+            <div id="Header_Menu" class="Header_Part">
+
+                <div class="boutonBurger" id="boutonBurger">
+                    <span class="span1" id="span1"></span>
+                    <span class="span2" id="span2"></span>
+                    <span class="span3" id="span3"></span>
+                </div>
+
+                <div class="menuBurger" id="menuBurger">
+                    <a asp-controller="Home" asp-action="Index" class="elt">Accueil</a>
+                    <a href="/Main/Recipes/Recipe_Form_Page.html" class="elt">Crée ma recette</a>
+                    <a asp-controller="Recettes" asp-action="Index" class="elt">Mes Recettes</a>
+                    <a href="/Main/Compte/Compte.html" class="elt">Compte</a>
+                    <button onclick="changeTheme('Light')">Clair</button>
+                    <button onclick="changeTheme('Dark')">Sombre</button>
+                    <button onclick="changeTheme('Rubisnoir')">Custom</button>
+                </div>
+
+            </div>
+
+            <div class="Header_Part" id="Header_Account">
+                <button type="button" id="Header_Account_Button" data-url="@Url.Action("Account", "Accounts")">Compte</button>
+            </div>
+        </div>
     </header>
-    <div class="container">
+    <div>
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - ProjectCookBook - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer>
+        <div class="Footer_Part" id="Footer">
+
+            <div class="Footer_Part" id="Complementary_Intel">
+                <h1>[info]</h1>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati, nihil veniam ut eaque deserunt ad
+                    quaerat sunt? Dolorem consectetur iste distinctio, ad odio reiciendis, assumenda, ex quo earum velit
+                    mollitia!
+                </p>
+            </div>
+
+            <nav class="Footer_Part" id="Footer_Nav">
+                <ul>
+                    <li>[1-]</li>
+                    <li>[2-]</li>
+                    <li>[3-]</li>
+                </ul>
+            </nav>
+
+            <hr>
+
+            <div class="Footer_Part" id="copyright">
+                <img src="/Main/Main/Logo_Copyright.png" alt="Logo Copyright" id="Logo_Copyright">All rights reserved,
+                Gastronome Créatif.
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

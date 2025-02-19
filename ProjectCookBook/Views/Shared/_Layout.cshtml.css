@@ -1,48 +1,202 @@
-﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿/* GENERAL */
 
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--Body_Background_Color);
 }
 
-a {
-  color: #0077cc;
+/* Header */
+div.Header {
+    position: fixed;
+    width: 100vw;
+    background-color: var(--Header_Background_Color);
+    border-style: solid;
+    border-color: var(--Header_Border_Color);
+    height: fit-content;
+    border-left: 0px;
+    border-right: 0px;
+    z-index: 50;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+div.Header_Part {
+    width: 100px;
+    height: 80px;
+    border-style: solid;
+    border-color: var(--Header_Border_Color);
+    border-top: 0px;
+    border-bottom: 0px;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+/* BOUTON BURGER */
+
+.boutonBurger {
+    position: fixed;
+    top: 20px;
+    left: 32px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 25;
 }
 
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+.span1 {
+    position: absolute;
+    top: 8px;
+    width: 100%;
+    height: 4px;
+    background-color: var(--Span_Color);
+    transition-duration: 0.5s;
 }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+.span1Open {
+    transform: rotate(-45deg);
+    top: 16px;
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+.span2 {
+    position: absolute;
+    top: 18px;
+    width: 100%;
+    height: 4px;
+    background-color: var(--Span_Color);
+    transition-duration: 0.5s;
+}
+
+.span2Open {
+    display: none;
+}
+
+.span3 {
+    position: absolute;
+    top: 28px;
+    width: 100%;
+    height: 4px;
+    background-color: var(--Span_Color);
+    transition-duration: 0.5s;
+}
+
+.span3Open {
+    transform: rotate(45deg);
+    top: 16px;
+}
+
+/* MENU BURGER */
+
+.menuBurger {
+    position: fixed;
+    top: 0;
+    left: -100vw;
+    width: 30vw;
+    height: 50vh;
+    background-color: var(--Header_Background_Color);
+    transition-duration: 0.5s;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.menuBurgerOpen {
+    left: 0;
+}
+
+.menuBurger > a {
+    color: var(--Menu_Burger_Font_Color);
+    margin: 20px 0 20px 0;
+    text-decoration: none;
+    font-size: 1.5em;
+}
+
+
+/* Search Bar */
+div#Header_Search_Bar {
+    position: fixed;
+    display: flex;
+    width: 100%;
+    height: 80px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+}
+
+    div#Header_Search_Bar > * {
+        height: 25px;
+    }
+
+#Search_Recipe {
+    border: 1px solid var(--Header_Border_Color);
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+#Search_Recipe_Button {
+    border: 1px solid var(--Header_Border_Color);
+    border-radius: 5px;
+    cursor: pointer;
+    height: 25px;
+}
+
+
+/* Account Button */
+div#Header_Account {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    right: 0px;
+    top: 3px;
+    width: 100px;
+}
+
+button#Header_Account_Button {
+    background-image: url("/Main/Main/Logo_Compte.png");
+    background-size: cover;
+    background-position: center;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    text-indent: -9999px;
+    /* Cache le texte du bouton */
+    border-radius: 10px;
+}
+
+    button#Header_Account_Button:hover {
+        transform: scale(1.05);
+    }
+
+
+/*Footer*/
+div#Footer {
+    background-color: darkgrey;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 15vw;
+    margin-top: 50px;
+}
+
+div#Complementary_Intel {
+    width: 70vw;
+    height: 1vh;
+}
+
+    div#Complementary_Intel > h1 {
+        font-size: medium;
+    }
+
+div#copyright {
+    width: 100vw;
+    border-top: 2px solid grey;
+    padding-top: 3px;
+}
+
+img#Logo_Copyright {
+    width: 20px;
+    height: 13px;
 }

@@ -1,0 +1,50 @@
+﻿@{
+    Layout = null;
+}
+
+@section Scripts {
+    <script src="~/js/SignUpSignIn.js" defer></script>
+}
+
+<form action="" id="FormConnexionInscription">
+    <fieldset id="Field_Connexion">
+        <ul>
+
+            <li>
+                <div class="Connexion">
+                    <label for="User_Username_Input">Username : </label>
+                    <input type="text" name="User_Username" id="User_Username_Input_Connexion" required>
+                </div>
+            </li>
+
+            <li>
+                <div class="Connexion">
+                    <label for="User_Email_Connexion">Email : </label>
+                    <input type="email" name="User_Email" id="User_Email_Connexion" required>
+                </div>
+            </li>
+
+            <li>
+                <div class="Connexion">
+                    <label for="User_Password_Input">Password : </label>
+                    <input type="password" name="User_Password" id="User_Password_Input_Connexion" required>
+                </div>
+            </li>
+
+            <li class="Submit">
+                <div class="Connexion">
+                    <input type="submit" value="Connexion">
+                </div>
+            </li>
+
+            <li class="Submit">
+                <div class="Connexion">
+                    <button id="Inscription" formnovalidate>Inscription</button>
+                </div>
+            </li>
+
+        </ul>
+
+
+    </fieldset>
+</form>

@@ -1,0 +1,42 @@
+﻿/* Label */
+h1#Label_Recipes_Categories {
+    margin-top: 5px;
+}
+
+h1#Label_Recipes_Accueil {
+    margin-top: 5px;
+}
+
+/* Scroller Recipes */
+div.Scroll_Width_Div {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px 0;
+    gap: 10px;
+    width: 100%; /* S'adapte au parent */
+    height: 25vh;
+    white-space: nowrap; /* Empêche les éléments de passer à la ligne */
+    scrollbar-width: thin;
+}
+
+/* Recipe Categories */
+div#Body_Recipes_Categories {
+    height: 8vh;
+}
+
+div.Recipe_Categorie {
+    width: 350px;
+    flex-shrink: 0; /* Empêche le redimensionnement */
+    background-color: var(--Recipe_Categorie_Background_Color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+    div.Recipe_Categorie:hover {
+        scale: 1.05;
+    }

@@ -2,15 +2,11 @@
 {
     public class Recette
     {
-        private int id { get; }
-        private string nom { get; set; }
-        private string description { get; set; }
-        private TimeOnly temps_preparation { get; set; }
-        private TimeOnly temps_cuisson { get; set; }
-        private int difficulte { get; set; }
-
-
-
-
+        public int id { get; }
+        public string nom { get; set; }
+        public string description { get; set; }
+        public TimeSpan temps_preparation { get; set; }
+        public TimeSpan temps_cuisson { get; set; }
+        public int difficulte { get; set; }
     }
 }

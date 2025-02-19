@@ -1,0 +1,93 @@
+﻿@model Recette
+@{
+}
+
+<div id="Recipe">
+
+    <div id="Recipe_Info" class="Recipe_Left_Part">
+        <h1>@Model.nom</h1>
+        <p>
+            @Model.description
+        </p>
+    </div>
+
+    <div id="Recipe_Image" class="Recipe_Right_Part">
+        <img src="/Main/Recipes/Image_Plat_Temp.jfif" alt="">
+    </div>
+
+    <div id="Recipe_Steps" class="Recipe_Left_Part">
+        <ul>
+            <li>
+                <div class="Recipe_Step">
+                    <p>
+                        [Step 1]
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Blanditiis dolores fugit harum
+                        sapiente
+                        excepturi delectus, veritatis inventore architecto quibusdam quos eaque atque cumque laborum
+                        molestias, suscipit ex aperiam reprehenderit perferendis!
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="Recipe_Step">
+                    <p>
+                        [Step 2]
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Blanditiis dolores fugit harum
+                        sapiente
+                        excepturi delectus, veritatis inventore architecto quibusdam quos eaque atque cumque laborum
+                        molestias, suscipit ex aperiam reprehenderit perferendis!
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="Recipe_Step">
+                    <p>
+                        [Step 3]
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Blanditiis dolores fugit harum
+                        sapiente
+                        excepturi delectus, veritatis inventore architecto quibusdam quos eaque atque cumque laborum
+                        molestias, suscipit ex aperiam reprehenderit perferendis!
+                    </p>
+                </div>
+            </li>
+            <li>
+                <div class="Recipe_Step">
+                    <p>
+                        [Step 4]
+                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Blanditiis dolores fugit harum
+                        sapiente
+                        excepturi delectus, veritatis inventore architecto quibusdam quos eaque atque cumque laborum
+                        molestias, suscipit ex aperiam reprehenderit perferendis!
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div id="Recipe_Info_Preparation" class="Recipe_Right_Part">
+
+        <div id="Times" class="Recipe_Part">
+            <ul>
+                <li>@Model.temps_preparation</li>
+                <li>@Model.temps_cuisson</li>
+                <li>@(Model.temps_preparation + Model.temps_cuisson)</li>
+            </ul>
+        </div>
+
+        <div id="Ingredients_List" class="Recipe_Part">
+            <ul>
+                <li>[Ingrédients 1] X x</li>
+                <li>[Ingrédients 2] X x</li>
+                <li>[Ingrédients 3] X x</li>
+                <li>[Ingrédients 4] X x</li>
+                <li>[Ingrédients 5] X x</li>
+                <li>[Ingrédients 6] X x</li>
+                <li>[Ingrédients 7] X x</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="Rating" class="Recipe_Left_Part">
+    </div>
+
+</div>

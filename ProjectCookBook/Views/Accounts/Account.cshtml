@@ -1,0 +1,24 @@
+﻿@model Account
+
+<div id="Account">
+
+    <div id="Personnal_Information">
+        <ul>
+            <li>@Model.identifiant</li>
+            <li>@Model.nom</li>
+            <li>@Model.prenom</li>
+            <li>@Model.email</li>
+        </ul>
+    </div>
+
+    <div id="Theme">
+        <button onclick="changeTheme('Light')">Clair</button>
+        <button onclick="changeTheme('Dark')">Sombre</button>
+        <button onclick="changeTheme('Rubisnoir')">Custom</button>
+
+        <a href="/Main/Accueil/Admin.html">Admin</a>
+        <a href="/Main/Compte/Sign_Up_In.html">Connexion / Inscription</a>
+
+    </div>
+
+</div>

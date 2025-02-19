@@ -1,0 +1,11 @@
+﻿@model Recette
+@{
+}
+
+<div class="Recipe_Book" data-url="@Url.Action("Detail", "Recettes", new { id = Model.id })" >
+    <div>
+        <h3 class="Rating">[Note]</h3>
+        <img src="/Main/Recipes/Image_Plat_Temp.jfif" alt="Alternate Text" />
+        <h2>@Model.nom</h2>
+    </div>
+</div>

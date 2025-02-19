@@ -1,0 +1,48 @@
+﻿body {
+    overflow-x: visible;
+}
+
+#Recipe {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-areas:
+        "Recipe_Info Recipe_Image"
+        "Recipe_Steps Recipe_Info_Preparation"
+        "Rating Recipe_Info_Preparation";
+    gap: 20px;
+}
+
+div.Recipe_Left_Part {
+    width: 55vw;
+}
+
+div.Recipe_Right_Part {
+    width: 39vw;
+}
+
+.Recipe_Part {
+    border: 2px solid black;
+    margin: 5px;
+    padding: 5px;
+}
+
+/* Step List */
+ul {
+    padding-left: 20px; /* Espacement général pour la liste */
+    margin: 0;
+}
+
+    ul li {
+        position: relative; /* Nécessaire pour gérer la bordure et le pseudo-élément */
+        padding-left: 30px; /* Espace pour laisser place à la puce personnalisée */
+        border: 2px solid #000; /* Bordure autour de l'élément li, incluant la puce et le texte */
+        margin-bottom: 10px; /* Espacement entre les éléments de la liste */
+        display: flex;
+        align-items: center; /* Aligne verticalement le texte et la puce */
+    }
+
+        ul li::marker {
+            color: #000;
+            font-size: 18px;
+            font-weight: bold;
+        }

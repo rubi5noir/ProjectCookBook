@@ -1,0 +1,42 @@
+﻿html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--Body_Background_Color);
+}
+
+form {
+    position: relative;
+    left: 20vw;
+    width: 50vw;
+    border: 3px black solid;
+    border-top: 1px var(--Div_Background_Color) solid;
+    background-color: var(--Div_Background_Color);
+}
+
+ul {
+    padding-left: 20px; /* Espacement général pour la liste */
+    margin: 0;
+}
+
+    ul li.Submit {
+        padding-left: 15vw;
+        border: none;
+    }
+
+    ul li {
+        padding: 5px;
+        position: relative; /* Nécessaire pour gérer la bordure et le pseudo-élément */
+        padding-left: 10px; /* Espace pour laisser place à la puce personnalisée */
+        border: 2px solid #000; /* Bordure autour de l'élément li, incluant la puce et le texte */
+        margin-bottom: 10px; /* Espacement entre les éléments de la liste */
+        display: flex;
+        align-items: center; /* Aligne verticalement le texte et la puce */
+    }
+
+        ul li::marker {
+            color: #000;
+            font-size: 18px;
+            font-weight: bold;
+        }

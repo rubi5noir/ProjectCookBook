@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dapper;
+using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using ProjectCookBook.Models;
-using Dapper;
 
 namespace ProjectCookBook.Controllers
 {
-    public class RecettesController : Controller
+    public class AccountsController : Controller
     {
         private readonly string _connexionString;
 
@@ -15,7 +15,7 @@ namespace ProjectCookBook.Controllers
         /// </summary>
         /// <param name="configuration">configuration de l'application</param>
         /// <exception cref="Exception"></exception>
-        public RecettesController(IConfiguration configuration)
+        public AccountsController(IConfiguration configuration)
         {
             // récupération de la chaîne de connexion dans la configuration
             _connexionString = configuration.GetConnectionString("CookBookDataBase")!;
@@ -26,27 +26,15 @@ namespace ProjectCookBook.Controllers
             }
         }
 
-
-        public IActionResult Index()
+        public IActionResult Account(int id)
         {
-            string query = "Select * from Recettes";
-            List<Recette> recettes;
+            string query = "Select * from Utilisateurs where id = @id";
+            Account account;
             using (var connexion = new NpgsqlConnection(_connexionString))
             {
-                recettes = connexion.Query<Recette>(query).ToList();
+                account = connexion.QuerySingle<Account>(query, new { id = id }); ;
             }
-            return View(recettes);
-        }
-
-        public IActionResult Detail(int id)
-        {
-            string query = "Select * from Recettes where id = @id";
-            Recette recette;
-            using (var connexion = new NpgsqlConnection(_connexionString))
-            {
-                recette = connexion.QuerySingle<Recette>(query, new { id = id }); ;
-            }
-            return View(recette);
+            return View(account);
         }
     }
 }
