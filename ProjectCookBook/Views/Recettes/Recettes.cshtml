@@ -1,0 +1,16 @@
+﻿@model List<Recette>
+@{
+    ViewData["Title"] = "Recettes";
+}
+
+<body>
+
+    <div id="Body_Recipes" class="Vignette_Recipes">
+        @foreach (var recette in Model)
+        {
+            @await Html.PartialAsync("_RecipeBook", recette)
+        }
+    </div>
+
+    <div id="Footer_PlaceHolder"></div>
+</body>

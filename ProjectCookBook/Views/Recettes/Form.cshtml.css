@@ -1,0 +1,113 @@
+﻿div#Form {
+    display: flex;
+    justify-content: center;
+}
+
+form {
+    z-index: 10;
+    position: absolute;
+    height: auto;
+}
+
+div.Temps {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+h1 {
+    cursor: default;
+    font: initial;
+}
+
+h2 {
+    cursor: default;
+    font: initial;
+    margin: 0px;
+    margin-right: 15px;
+}
+
+div.Temps select {
+    width: 50px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+fieldset#Titre_Recette_Fieldset {
+    display: flex;
+    flex-direction: column;
+}
+
+fieldset {
+    width: 60vw;
+    background-color: var(--Header_Background_Color);
+    border: 2px solid;
+    border-color: var(--Header_Border_Color);
+    border-radius: 15px;
+    margin: 5px;
+}
+
+    fieldset > * {
+        margin: 5px;
+    }
+
+    fieldset#Form_Fieldset {
+        display: flex;
+        flex-direction: column;
+        width: auto;
+        height: auto;
+        justify-content: space-between;
+    }
+
+
+
+
+div#Total_Time {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+    div#Total_Time > p {
+        margin-left: 5px;
+    }
+
+/* Recipe Steps */
+div.Recipe_Step {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    padding: 1px;
+    border: 1px solid;
+}
+
+/* Ingredients */
+div.Div_Ingredient input {
+    margin-left: 5px;
+    height: 20px;
+    width: 20%;
+}
+
+/* Categories */
+div.Div_Categorie {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    padding: 1px;
+    border: 1px solid;
+}
+
+/* select */
+
+select {
+    height: 30px;
+    border: 1px solid;
+    border-color: var(--Header_Border_Color);
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+/* Buttons */
+button {
+    margin: 5px;
+}

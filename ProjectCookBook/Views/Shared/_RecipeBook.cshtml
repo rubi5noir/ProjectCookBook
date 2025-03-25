@@ -4,8 +4,8 @@
 
 <div class="Recipe_Book" data-url="@Url.Action("Detail", "Recettes", new { id = Model.id })" >
     <div>
-        <h3 class="Rating">[Note]</h3>
-        <img src="/Main/Recipes/Image_Plat_Temp.jfif" alt="Alternate Text" />
+        <h3 class="Rating"></h3><h3 class="Rating_On_Vignette">@(Model.avis.Any() ? Math.Round(Model.avis.Average(a => a.note),1) : 0)</h3>
+        <img src="@Model.img" alt="Alternate Text" />
         <h2>@Model.nom</h2>
     </div>
 </div>

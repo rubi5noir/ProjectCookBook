@@ -1,12 +1,18 @@
-﻿namespace ProjectCookBook.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ProjectCookBook.Models
 {
-    public class Account
+    public class Compte
     {
-        public int id { get; }
+        public int id { get; set; }
         public string identifiant { get; set; }
         public string nom { get; set; }
         public string prenom { get; set; }
+
+        [DataType(DataType.EmailAddress)]
         public string email { get; set; }
+
+        [DataType(DataType.Password)]
         public string password { get; set; }
     }
 }

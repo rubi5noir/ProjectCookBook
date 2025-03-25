@@ -4,8 +4,12 @@ using Npgsql;
 using ProjectCookBook.Models;
 using Dapper;
 
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+
 namespace ProjectCookBook.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -33,18 +37,58 @@ namespace ProjectCookBook.Controllers
 
         public IActionResult Index()
         {
-            string query = "Select * from Recettes";
+            string query = "Select * from Recettes " +
+                           "LEFT join avis on avis.id_recette = recettes.id " +
+                           "order by id asc";
+            List<Recette> recettesgrouped;
             List<Recette> recettes;
-            using (var connexion = new NpgsqlConnection(_connexionString))
+            try
             {
-                recettes = connexion.Query<Recette>(query).ToList();
+                using (var connexion = new NpgsqlConnection(_connexionString))
+                {
+                    recettes = connexion.Query<Recette, Avis, Recette>(query, (recette, avis) =>
+                    {
+                        recette.avis.Add(avis);
+                        return recette;
+                    },
+                    splitOn: "id, id_recette").ToList();
+                }
             }
-            return View(recettes);
+            catch (Exception)
+            {
+                return NotFound();
+            }
+
+            recettesgrouped = recettes.GroupBy(R => R.id).Select(g =>
+            {
+                Recette groupedRecette = g.First();
+
+                groupedRecette.avis = g.SelectMany(R => R.avis).ToList();
+
+                return groupedRecette;
+            }).ToList();
+
+
+            return View(recettesgrouped);
         }
 
-        public IActionResult SignUpSignIn()
+        public IActionResult GetCategories()
         {
-            return View();
+            string query = "Select * from Categories";
+            List<Categorie> categories;
+            try
+            {
+                using (var connexion = new NpgsqlConnection(_connexionString))
+                {
+                    categories = connexion.Query<Categorie>(query).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+
+            return PartialView("_CategorieVignette", categories);
         }
 
         public IActionResult Privacy()

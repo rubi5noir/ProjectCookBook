@@ -1,0 +1,269 @@
+﻿@model RecetteFormViewModel
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/Recettes_Form.js"></script>
+
+    <script>
+
+
+        /* Ingredients */
+        $(document).ready(function () {
+        let rowCountIngredient = parseInt($("#totalIngredient").val()) || 0;
+
+        $("#Add_Ingredients_Button").click(function () {
+        rowCountIngredient++;
+        $("#totalIngredient").val(rowCountIngredient);
+
+        let html = `
+        <div id="inputRowIngredient">
+        <select name="ingredients[${rowCountIngredient-1}].id" class="form-control">
+        <option value="">-- Sélectionner un ingrédient --</option>
+        @foreach (var ingredient in Model.select_ingredients_list)
+        {
+            <option value="@ingredient.Value">@ingredient.Text</option>
+        }
+        </select>
+
+        <input type="text" name="ingredients[${rowCountIngredient-1}].quantite" class="form-control" />
+        <button id="Delete_Ingredients_Button" type="button" formnovalidate>Retirer Ingrédients</button>
+        </div>
+        `;
+
+        $('#newRowIngredient').append(html);
+        });
+
+        $(document).on('click', '#Delete_Ingredients_Button', function () {
+        $(this).closest('#inputRowIngredient').remove();
+        rowCountIngredient--;
+        $("#totalIngredient").val(rowCountIngredient);
+        });
+        });
+
+
+        /* Steps */
+        let rowCountStep = parseInt($("#totalStep").val()) || 0;
+
+        $("#Add_Step_Button").click(function () {
+        rowCountStep++;
+        $("#totalStep").val(rowCountStep);
+
+        let html = `
+        <div id="inputRowStep">
+        <label>Etape ${rowCountStep} </label>
+        <textarea name="etapes[${rowCountStep-1}].texte" class="form-control"> </textarea>
+        <button id="Delete_Step_Button" type="button" formnovalidate>Retirer Etape</button>
+        </div>
+        `;
+
+        $('#newRowStep').append(html);
+        });
+
+        $(document).on('click', '#Delete_Step_Button', function () {
+        $(this).closest('#inputRowStep').remove();
+        rowCountStep--;
+        $("#totalStep").val(rowCountStep);
+        });
+
+
+
+        /* Categories */
+        let rowCountCategorie = parseInt($("#totalCategorie").val()) || 0;
+
+        $("#Add_Categorie_Button").click(function () {
+        rowCountCategorie++;
+        $("#totalCategorie").val(rowCountCategorie);
+
+        let html = `
+        <div id="inputRowCategorie">
+
+        <select name="categories[${rowCountCategorie-1}].id" class="form-control">
+        <option value="">-- Sélectionner une Categorie --</option>
+        @foreach (var categorie in Model.select_categories_list)
+        {
+            <option value="@categorie.Value">@categorie.Text</option>
+        }
+        </select>
+
+        <button id="Delete_Categorie_Button" type="button" formnovalidate>Retirer Categorie</button>
+        </div>
+        `;
+
+        $('#newRowCategorie').append(html);
+        });
+
+        $(document).on('click', '#Delete_Categorie_Button', function () {
+        $(this).closest('#inputRowCategorie').remove();
+        rowCountCategorie--;
+        $("#totalCategorie").val(rowCountCategorie);
+        });
+    </script>
+}
+
+<div id="Form">
+    <form asp-controller="Recettes" asp-action="@(Model.recette != null ? "Editer" : "Ajouter")" method="post" enctype="multipart/form-data">
+
+        <fieldset id="Form_Fieldset">
+
+            <fieldset id="Titre_Recette_Fieldset">
+                <label asp-for="@Model.nom" style="margin: 5px">Nom de la Recette : </label>
+                <input asp-for="@Model.nom">
+                <span asp-validation-for="@Model.nom" class="text-danger"></span>
+
+
+                @* Utilisation de style car le css ne le prend pas en raison du manque de b-wukh5ow154 aucune idée de pourquoi ou comment regler le probleme malgré differents essais*@
+                <label asp-for="@Model.description" style="margin: 5px">description de la recette : </label>
+                <textarea asp-for="@Model.description"></textarea>
+                <span asp-validation-for="@Model.description" class="text-danger"></span>
+
+
+            </fieldset>
+
+            <fieldset id="Ingredients_Fieldset">
+
+                <h1>Ingrédients : </h1>
+
+
+
+                <button id="Add_Ingredients_Button" type="button" formnovalidate>Ajouter Ingrédients</button>
+
+                <div id="newRowIngredient">
+                    <input type="hidden" id="totalIngredient" value="@Model.ingredients.Count" />
+
+                    @for (var i = 0; i < Model.ingredients.Count; i++)
+                    {
+                        <div id="inputRowIngredient" class="Div_Ingredient">
+                            <select asp-for="ingredients[i].id" class="form-control">
+                                <option value="">-- Sélectionner un ingrédient --</option>
+                                @foreach (var ingredient in ViewBag.select_ingredients)
+                                {
+                                    <option value="@ingredient.Value">@ingredient.Text</option>
+                                }
+                            </select>
+                            <input asp-for="ingredients[i].quantite" type="text" class="form-control" />
+                            <button id="Delete_Ingredients_Button" type="button" formnovalidate>Retirer Ingrédients</button>
+                        </div>
+                    }
+                </div>
+                <span class="text-danger">@TempData["ingredient"]</span>
+
+            </fieldset>
+
+            <fieldset id="Cooking_Steps_Fieldset">
+
+                <h1>étapes de préparation :</h1>
+
+                <button id="Add_Step_Button" type="button" formnovalidate>Ajouter étape</button>
+
+                <div id="newRowStep">
+                    <input type="hidden" id="totalStep" value="@Model.etapes.Count" />
+
+                    @for (var i = 0; i < Model.etapes.Count; i++)
+                    {
+                        <div id="inputRowStep">
+                            <label asp-for="etapes[i].texte">Etape @(i + 1) </label>
+                            <textarea asp-for="etapes[i].texte" class="form-control"> </textarea>
+                            <button id="Delete_Step_Button" type="button" formnovalidate>Retirer étape</button>
+                        </div>
+                    }
+                </div>
+                <span class="text-danger">@TempData["etape"]</span>
+
+            </fieldset>
+
+            <fieldset id="Misc_Info_Fieldset">
+                <div>
+                    <h1>Temps de Préparation :</h1>
+                    <div class="Temps">
+                        <select id="Cooking_Time_Cook_Heures" asp-for="@Model.temps_preparation_heures" asp-items="@Model.select_temps_preparation_heures_list" onchange="updateTotalTime()">
+                        </select>
+                        <h2>h</h2>
+                        <select id="Cooking_Time_Cook_Minutes" asp-for="@Model.temps_preparation_minutes" asp-items="@Model.select_temps_preparation_minutes_list" onchange="updateTotalTime()">
+                        </select>
+                        <h2>mins</h2>
+                    </div>
+                </div>
+
+                <div>
+                    <h1>Temps de Cuisson :</h1>
+                    <div class="Temps">
+                        <select id="Cooking_Time_Heating_Heures" asp-for="@Model.temps_cuisson_heures" asp-items="@Model.select_temps_cuisson_heures_list" onchange="updateTotalTime()">
+                        </select>
+                        <h2>h</h2>
+                        <select id="Cooking_Time_Heating_Minutes" asp-for="@Model.temps_cuisson_minutes" asp-items="@Model.select_temps_cuisson_minutes_list" onchange="updateTotalTime()">
+                        </select>
+                        <h2>mins</h2>
+                    </div>
+                </div>
+
+                <div id="Total_Time">
+                    <p>Temps Total : </p>
+                    <p id="totalTime"></p>
+                </div>
+
+
+                <div>
+
+                    <label asp-for="@Model.difficulte">Difficulté de la recette : </label>
+                    <select asp-for="@Model.difficulte" asp-items="@Model.select_difficulte_list"></select>
+
+                </div>
+
+            </fieldset>
+
+            <fieldset id="Categories_Fieldset">
+
+                <h1>Catégories :</h1>
+
+                <button id="Add_Categorie_Button" type="button" formnovalidate>Ajouter categorie</button>
+
+                <div id="newRowCategorie">
+                    <input type="hidden" id="totalCategorie" value="@Model.categories.Count" />
+
+                    @for (var i = 0; i < Model.categories.Count; i++)
+                    {
+                        <div id="inputRowCategorie">
+                            <select asp-for="categories[i].id" class="form-control">
+                                <option value="">-- Sélectionner une Categorie --</option>
+                                @foreach (var categorie in ViewBag.select_categories)
+                                {
+                                    <option value="@categorie.Value">@categorie.Text</option>
+                                }
+                            </select>
+                            <button id="Delete_Categorie_Button" type="button" formnovalidate>Retirer Categorie</button>
+                        </div>
+                    }
+                </div>
+                <span class="text-danger">@TempData["categorie"]</span>
+
+            </fieldset>
+
+            <fieldset id="Photo_Fieldset">
+
+                <label asp-for="@Model.imgFile">Photo :</label>
+                <input asp-for="@Model.imgFile" id="Form_Image_File_User">
+                @if (Model.img != null)
+                {
+                    <div>
+                        <label>Image actuelle :</label>
+                        <img src="@Model.img" alt="Image de la recette" width="200" />
+                    </div>
+                }
+
+            </fieldset>
+
+            <input type="submit" value="Valider"/>
+
+            @if (Model.recette is not null)
+            {
+                <input type="hidden" asp-for="@Model.id" value="@Model.recette.id" />
+            }
+            @if (Model.createur_id is not null)
+            {
+                <input type="hidden" asp-for="@Model.createur_id" value="@Model.createur_id"/>
+            }
+            <input type="hidden" asp-for="@Model.img" value="@Model.img" />
+
+        </fieldset>
+    </form>
+</div>
+

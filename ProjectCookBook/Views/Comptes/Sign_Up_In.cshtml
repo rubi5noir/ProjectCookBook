@@ -1,0 +1,116 @@
+﻿@model Compte
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="~/js/Login.js" defer></script>
+</head>
+
+<body>
+
+    <form asp-controller="Comptes" asp-action="SignIn" method="post" id="FormConnexion">
+        <fieldset id="Field_Connexion">
+            <ul>
+
+                <li>
+                    <div class="Connexion">
+                        <label asp-for="@Model.identifiant">Username : </label>
+                        <input asp-for="@Model.identifiant" id="User_Username_Input_Connexion" required>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="Connexion">
+                        <label asp-for="@Model.email">Email : </label>
+                        <input asp-for="@Model.email" id="User_Email_Input_Connexion" required>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="Connexion">
+                        <label asp-for="@Model.password">Password : </label>
+                        <input asp-for="@Model.password" id="User_Password_Input_Connexion" required>
+                    </div>
+                </li>
+
+                <li class="Submit">
+                    <div class="Connexion">
+                        <input type="submit" value="Connexion">
+                    </div>
+                </li>
+
+                <li class="Submit">
+                    <div class="Connexion">
+                        <button id="Inscription" formnovalidate>Inscription</button>
+                    </div>
+                </li>
+
+            </ul>
+        </fieldset>
+        @if (ViewData["ValidateMessage"] != null)
+        {
+            <p>@ViewData["ValidateMessage"]</p>
+        }
+        @if (Context.Request.Query.ContainsKey("ReturnURL"))
+        {
+            <input type="hidden" name="ReturnURL" value="@Context.Request.Query["ReturnURL"]">
+        }
+    </form>
+
+    <form asp-controller="Comptes" asp-action="SignUp" method="post" id="FormInscription">
+        <fieldset id="Field_Inscription">
+            <ul>
+                <li>
+                    <div class="Connexion">
+                        <label asp-for="@Model.identifiant">Username : </label>
+                        <input asp-for="@Model.identifiant" id="User_Username_Input_Inscription" required>
+                    </div>
+                </li>
+                <li>
+                    <div class="Connexion">
+                        <label asp-for="@Model.nom">Nom : </label>
+                        <input asp-for="@Model.nom" id="User_Nom_Input_Inscription" required>
+                    </div>
+                </li>
+                <li>
+                    <div class="Connexion">
+                        <label asp-for="@Model.prenom">Prénom : </label>
+                        <input asp-for="@Model.prenom" id="User_Prenom_Input_Inscription" required>
+                    </div>
+                </li>
+                <li>
+                    <div class="Connexion">
+                        <label asp-for="@Model.email">Email : </label>
+                        <input asp-for="@Model.email" id="User_Email_Input_Inscription" required>
+                    </div>
+                </li>
+                <li>
+                    <div class="Connexion">
+                        <label asp-for="@Model.password">Password : </label>
+                        <input asp-for="@Model.password" id="User_Password_Input_Inscription" required>
+                    </div>
+                </li>
+
+                <li class="Submit">
+                    <div class="Connexion">
+                        <input type="submit" value="Inscription">
+                    </div>
+                </li>
+
+                <li class="Submit">
+                    <div class="Connexion">
+                        <button id="Connexion" formnovalidate>Connexion</button>
+                    </div>
+                </li>
+            </ul>
+        </fieldset>
+        @if (ViewData["ValidateMessage"] != null)
+        {
+            <p>@ViewData["ValidateMessage"]</p>
+        }
+    </form>
+</body>
+</html>

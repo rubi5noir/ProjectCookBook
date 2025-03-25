@@ -1,4 +1,4 @@
-﻿@model Account
+﻿@model Compte
 
 <div id="Account">
 
@@ -17,8 +17,10 @@
         <button onclick="changeTheme('Rubisnoir')">Custom</button>
 
         <a href="/Main/Accueil/Admin.html">Admin</a>
-        <a href="/Main/Compte/Sign_Up_In.html">Connexion / Inscription</a>
-
+        @if (User.Identity.IsAuthenticated)
+        {
+            <button type="button" onclick="window.location.href='@Url.Action("LogOut", "Comptes")'">Déconnexion</button>
+        }
     </div>
 
 </div>

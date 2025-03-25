@@ -1,0 +1,10 @@
+﻿@model List<Categorie>
+@{
+}
+
+@foreach (Categorie categorie in Model)
+{
+    <div class="Recipe_Categorie" data-url="@Url.Action("Categorie", "Recettes", new { id = categorie.id })">
+        <h2>@categorie.nom</h2>
+    </div>
+}

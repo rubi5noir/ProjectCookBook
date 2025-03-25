@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - ProjectCookBook</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ProjectCookBook.styles.css" asp-append-version="true" />
 </head>
@@ -28,8 +28,8 @@
 
                 <div class="menuBurger" id="menuBurger">
                     <a asp-controller="Home" asp-action="Index" class="elt">Accueil</a>
-                    <a href="/Main/Recipes/Recipe_Form_Page.html" class="elt">Crée ma recette</a>
-                    <a asp-controller="Recettes" asp-action="Index" class="elt">Mes Recettes</a>
+                    <a asp-controller="Recettes" asp-action="Ajouter" class="elt">Crée ma recette</a>
+                    <a asp-controller="Recettes" asp-action="MesRecettes" class="elt">Mes Recettes</a>
                     <a href="/Main/Compte/Compte.html" class="elt">Compte</a>
                     <button onclick="changeTheme('Light')">Clair</button>
                     <button onclick="changeTheme('Dark')">Sombre</button>
@@ -39,7 +39,7 @@
             </div>
 
             <div class="Header_Part" id="Header_Account">
-                <button type="button" id="Header_Account_Button" data-url="@Url.Action("Account", "Accounts")">Compte</button>
+                <button type="button" id="Header_Account_Button" data-url="@Url.Action("Compte", "Comptes", new { id = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)) })">Compte</button>
             </div>
         </div>
     </header>
@@ -72,7 +72,7 @@
             <hr>
 
             <div class="Footer_Part" id="copyright">
-                <img src="/Main/Main/Logo_Copyright.png" alt="Logo Copyright" id="Logo_Copyright">All rights reserved,
+                <img src="~/Img/Icons/Copyright-Logo.png" alt="Logo Copyright" id="Logo_Copyright">All rights reserved,
                 Gastronome Créatif.
             </div>
         </div>

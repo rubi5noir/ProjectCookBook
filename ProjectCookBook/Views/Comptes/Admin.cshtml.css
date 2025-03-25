@@ -1,0 +1,20 @@
+﻿div.body {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: rgba(0, 0, 0, 0);
+    width: 100vw;
+    justify-content: space-around;
+}
+
+div.Admin_Direction {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    background-color: var(--Div_Background_Color);
+    height: 100px;
+    width: 300px;
+    border: 3px black solid;
+}

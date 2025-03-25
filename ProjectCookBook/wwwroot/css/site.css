@@ -3,6 +3,7 @@ html,
 body {
     overflow-x: visible;
     background-color: var(--Body_Background_Color);
+    margin: 0;
 }
 
 header {
@@ -62,7 +63,7 @@ div.Recipe_Book {
 .Recipe_Book img {
     display: var(--Display_Image);
     width: 100%;
-    height: 100%;
+    height: 217px;
     object-fit: cover;
 }
 
@@ -88,6 +89,11 @@ h3 {
     z-index: 10;
 }
 
+    h3.Rating_On_Vignette {
+        top: 11px;
+        font-size: 18px;
+    }
+
 
 div.Recipe_Book:hover {
     scale: 1.05;
@@ -96,6 +102,7 @@ div.Recipe_Book:hover {
 div.Vignette_Recipes .Recipe_Book {
     height: 25vh;
     margin: 5px;
+    white-space: 
 }
 
 .Recipe_Book h2 {
@@ -113,6 +120,31 @@ div.Vignette_Recipes .Recipe_Book {
 h2 {
     font-size: medium;
 }
+
+/* Recipe Categories */
+div#Body_Recipes_Categories {
+    height: 8vh;
+}
+
+div.Recipe_Categorie {
+    width: 350px;
+    flex-shrink: 0; /* Empêche le redimensionnement */
+    background-color: var(--Recipe_Categorie_Background_Color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+    div.Recipe_Categorie:hover {
+        scale: 1.05;
+    }
+
+    div.Recipe_Categorie > h2 {
+        font-size:larger;
+    }
 
 
 /* Themes */
@@ -158,8 +190,8 @@ h2 {
     --Label_Zones_Accueil_Background_Color: rgb(167, 15, 15);
     --Label_Zones_Accueil_Border_Bottom: gold;
     --Recipe_Categorie_Background_Color: rgb(174, 114, 9);
-    --Recipe_Book_Background_Color: none;
-    --Recipe_Book_Background_Image: url(/Main/Test_Cover_Book_Recipe.png);
+    --Recipe_Book_Background_Color: rgb(52, 52, 52);
+    --Recipe_Book_Background_Image: none;
     --Display_Image: none;
     --Header_Border_Color: black;
     --Div_Background_Color: rgb(167, 15, 15);

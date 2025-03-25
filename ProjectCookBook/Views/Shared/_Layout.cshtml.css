@@ -154,7 +154,7 @@ div#Header_Account {
 }
 
 button#Header_Account_Button {
-    background-image: url("/Main/Main/Logo_Compte.png");
+    background-image: url("Img/Icons/compte.png");
     background-size: cover;
     background-position: center;
     width: 50px;
@@ -197,6 +197,5 @@ div#copyright {
 }
 
 img#Logo_Copyright {
-    width: 20px;
-    height: 13px;
+    width: 2%;
 }

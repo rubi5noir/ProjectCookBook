@@ -2,6 +2,20 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('@Url.Action("GetCategories", "Home")')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('Body_Recipes_Categories').innerHTML = data;
+            })
+            .catch(error => {
+                console.error("Erreur lors du chargement des catégories :", error);
+                document.getElementById('Body_Recipes_Categories').textContent = 'Impossible de charger les catégories. Réessayez plus tard.';
+            });
+    });
+</script>
+
 
 <div id="Body">
 
@@ -15,6 +29,7 @@
 
     <h1 class="Label_Zones_Accueil" id="Label_Recipes_Categories">Categories</h1>
     <div class="Scroll_Width_Div" id="Body_Recipes_Categories">
+        @*script ajoute les categories*@
     </div>
 
     <h1 class="Label_Zones_Accueil" id="Label_Recipes_Accueil">Recettes</h1>

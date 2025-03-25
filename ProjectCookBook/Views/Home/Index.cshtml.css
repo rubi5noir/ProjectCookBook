@@ -16,7 +16,7 @@ div.Scroll_Width_Div {
     gap: 10px;
     width: 100%; /* S'adapte au parent */
     height: 25vh;
-    white-space: nowrap; /* Empêche les éléments de passer à la ligne */
+    /*white-space: nowrap;*/ /* Empêche les éléments de passer à la ligne */
     scrollbar-width: thin;
 }
 
@@ -24,7 +24,7 @@ div.Scroll_Width_Div {
 div#Body_Recipes_Categories {
     height: 8vh;
 }
-
+Recette délicieuse mais nécessite beaucoup de temps !
 div.Recipe_Categorie {
     width: 350px;
     flex-shrink: 0; /* Empêche le redimensionnement */

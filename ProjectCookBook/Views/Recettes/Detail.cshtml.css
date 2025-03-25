@@ -26,6 +26,10 @@ div.Recipe_Right_Part {
     padding: 5px;
 }
 
+#Recipe_Image > * {
+    width: 100%;
+}
+
 /* Step List */
 ul {
     padding-left: 20px; /* Espacement général pour la liste */
@@ -46,3 +50,38 @@ ul {
             font-size: 18px;
             font-weight: bold;
         }
+
+
+
+div.Rating {
+    display: flex;
+    flex-wrap: wrap;
+    width: 55vw;
+    background-color: slategray;
+    clip-path: none;
+    height: auto;
+    position: relative;
+    padding-left: 20px;
+}
+
+    div.Rating > div {
+        width: 55vw;
+    }
+
+h2.Rating {
+    width: 20px;
+    margin: 0px;
+    margin-right: 5px;
+    position: relative;
+    clip-path: none;
+    background-color: slategray;
+}
+
+h3.Rating {
+    margin: 1px;
+    top: 0;
+    position: relative;
+}
+h2.Rating, h3.Rating {
+    display: inline-block;
+}
