@@ -1,4 +1,4 @@
-﻿@model List<Recette>
+﻿@model RecetteHomeViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -21,7 +21,7 @@
 
     <h1 class="Label_Zones_Accueil" id="Label_My_Recipes">Mes Recettes</h1>
     <div class="Scroll_Width_Div" id="Body_My_Recipes">
-        @foreach(var recette in Model)
+        @foreach(var recette in Model.mesrecettes)
         {
             @await Html.PartialAsync("_RecipeBook", recette)
         }
@@ -34,7 +34,7 @@
 
     <h1 class="Label_Zones_Accueil" id="Label_Recipes_Accueil">Recettes</h1>
     <div id="Body_Recipes" class="Vignette_Recipes">
-        @foreach (var recette in Model)
+        @foreach (var recette in Model.recettes)
         {
             @await Html.PartialAsync("_RecipeBook", recette)
         }

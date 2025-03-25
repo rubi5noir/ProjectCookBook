@@ -37,16 +37,54 @@ namespace ProjectCookBook.Controllers
 
         public IActionResult Index()
         {
-            string query = "Select * from Recettes " +
+            RecetteHomeViewModel recetteHomeViewModel = new RecetteHomeViewModel();
+
+            string queryrecettes = "Select * from Recettes " +
                            "LEFT join avis on avis.id_recette = recettes.id " +
                            "order by id asc";
+
+            string querymesrecettes = "Select * from Recettes " +
+                           "left join avis on avis.id_recette = recettes.id " +
+                           "Where recettes.id_utilisateur = @createur " +
+                           "order by id asc";
+            List<Recette> mesrecettesgrouped;
+            List<Recette> mesrecettes;
+            try
+            {
+                using (var connexion = new NpgsqlConnection(_connexionString))
+                {
+                    mesrecettes = connexion.Query<Recette, Avis, Recette>(querymesrecettes, (recette, avis) =>
+                    {
+                        recette.avis.Add(avis);
+                        return recette;
+                    },
+                    new { createur = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)) },
+                    splitOn: "id, id_recette").ToList();
+                }
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
+
+            mesrecettesgrouped = mesrecettes.GroupBy(R => R.id).Select(g =>
+            {
+                Recette groupedRecette = g.First();
+
+                groupedRecette.avis = g.SelectMany(R => R.avis).ToList();
+
+                return groupedRecette;
+            }).ToList();
+
+            recetteHomeViewModel.mesrecettes = mesrecettesgrouped;
+
             List<Recette> recettesgrouped;
             List<Recette> recettes;
             try
             {
                 using (var connexion = new NpgsqlConnection(_connexionString))
                 {
-                    recettes = connexion.Query<Recette, Avis, Recette>(query, (recette, avis) =>
+                    recettes = connexion.Query<Recette, Avis, Recette>(queryrecettes, (recette, avis) =>
                     {
                         recette.avis.Add(avis);
                         return recette;
@@ -68,8 +106,9 @@ namespace ProjectCookBook.Controllers
                 return groupedRecette;
             }).ToList();
 
+            recetteHomeViewModel.recettes = recettesgrouped;
 
-            return View(recettesgrouped);
+            return View(recetteHomeViewModel);
         }
 
         public IActionResult GetCategories()

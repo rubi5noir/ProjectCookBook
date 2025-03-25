@@ -9,6 +9,7 @@ using System.Transactions;
 using System.Security.Claims;
 using System.Collections.Immutable;
 using Microsoft.AspNetCore.Authorization;
+using System.Data.Common;
 
 namespace ProjectCookBook.Controllers
 {
@@ -825,15 +826,83 @@ namespace ProjectCookBook.Controllers
             }
         }
 
-        public IActionResult Search()
+        [HttpGet]
+        public IActionResult Search(List<Recette> recettesgrouped)
         {
-            return View();
+            return View(recettesgrouped);
+        }
+
+        [HttpPost]
+        public IActionResult Search(string Search_Recipe)
+        {
+            string queryrechercheutilisateur = "SELECT DISTINCT recettes.id " +
+                "FROM RECETTES " +
+                "INNER JOIN UTILISATEURS ON UTILISATEURS.ID = ID_UTILISATEUR " +
+                "INNER JOIN CATEGORIES_RECETTES ON CATEGORIES_RECETTES.ID_RECETTE = recettes.ID " +
+                "INNER JOIN CATEGORIES ON categories.id = CATEGORIES_RECETTES.ID_CATEGORIE " +
+                "INNER JOIN INGREDIENTS_RECETTES ON INGREDIENTS_RECETTES.ID_RECETTE = recettes.ID " +
+                "INNER JOIN INGREDIENTS ON INGREDIENTS.ID = ID_INGREDIENT " +
+                "WHERE RECETTES.NOM LIKE @recherche " +
+                "OR UTILISATEURS.IDENTIFIANT LIKE @recherche " +
+                "OR CATEGORIES.NOM LIKE @recherche " +
+                "OR INGREDIENTS.NOM LIKE @recherche";
+
+            string queryrecettes = "Select * from Recettes " +
+                           "LEFT join avis on avis.id_recette = recettes.id " +
+                           "where recettes.id = ANY(@ids) " +
+                           "order by id asc";
+
+            List<int> recettes_ids = new List<int>();
+            List<Recette> recettesgrouped;
+            List<Recette> recettes;
+
+            using (var connexion = new NpgsqlConnection(_connexionString))
+            {
+                try
+                {
+                    recettes_ids = connexion.Query<int>(queryrechercheutilisateur, new { recherche = "%" + Search_Recipe + "%" }).ToList();
+
+                    List<object> parametersRecettes = new List<object>();
+                    foreach (var id in recettes_ids)
+                    {
+                        parametersRecettes.Add(
+                            new
+                            {
+                                id = id
+                            });
+                    }
+
+                    recettes = connexion.Query<Recette, Avis, Recette>(queryrecettes, (recette, avis) =>
+                    {
+                        recette.avis.Add(avis);
+                        return recette;
+                    },
+                    new { ids = recettes_ids.ToArray() },
+                    splitOn: "id, id_recette").ToList();
+                }
+                catch (Exception)
+                {
+                    return NotFound();
+                }
+            }
+
+            recettesgrouped = recettes.GroupBy(R => R.id).Select(g =>
+                        {
+                            Recette groupedRecette = g.First();
+
+                            groupedRecette.avis = g.SelectMany(R => R.avis).ToList();
+
+                            return groupedRecette;
+                        }).ToList();
+
+            return View("Search", recettesgrouped);
         }
 
         public IActionResult MesRecettes()
         {
             string query = "Select * from Recettes " +
                            "left join avis on avis.id_recette = recettes.id " +
+                           "Where recettes.id_utilisateur = @createur " +
                            "order by id asc";
             List<Recette> recettesgrouped;
             List<Recette> recettes;
@@ -846,6 +915,7 @@ namespace ProjectCookBook.Controllers
                         recette.avis.Add(avis);
                         return recette;
                     },
+                    new { createur = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)) },
                     splitOn: "id, id_recette").ToList();
                 }
             }

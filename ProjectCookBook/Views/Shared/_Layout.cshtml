@@ -14,8 +14,10 @@
         <div id="Header" class="Header">
 
             <div id="Header_Search_Bar">
-                <input type="search" name="Search_Recipe" id="Search_Recipe">
-                <label for="Search_Recipe"><button id="Search_Recipe_Button">Rechercher</button></label>
+                <form asp-controller="Recettes" asp-action="Search" method="post" class="search-form">
+                    <input type="search" name="Search_Recipe" id="Search_Recipe" placeholder="Rechercher une recette...">
+                    <button type="submit" id="Search_Recipe_Button">Rechercher</button>
+                </form>
             </div>
 
             <div id="Header_Menu" class="Header_Part">

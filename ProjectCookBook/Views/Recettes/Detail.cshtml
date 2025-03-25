@@ -1,6 +1,6 @@
 ﻿@model Recette
 @section Scripts {
-<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }
 
 <div id="Recipe">
@@ -32,6 +32,8 @@
         </ul>
     </div>
 
+    
+
     <div id="Recipe_Info_Preparation" class="Recipe_Right_Part">
 
         <div id="Times" class="Recipe_Part">
@@ -54,6 +56,21 @@
 
     <div>
         <button type="button" onclick="window.location.href='@Url.Action("Editer", "Recettes", new { id = Model.id })'">Modifier recette</button>
+    </div>
+
+    <div class="Recipe_Right_Part">
+        <ul>
+            @foreach (Categorie categorie in Model.categories)
+            {
+                <li>
+                    <div>
+                        <p>
+                            @categorie.nom
+                        </p>
+                    </div>
+                </li>
+            }
+        </ul>
     </div>
 
     <div id="Rating" class="Recipe_Left_Part">

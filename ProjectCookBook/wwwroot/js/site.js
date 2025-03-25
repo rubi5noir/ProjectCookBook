@@ -19,27 +19,6 @@ document.body.className = savedTheme;
 console.log("Header chargé, initialisation des scripts...");
 console.log("Vérification des éléments : ", document.getElementById('boutonBurger')); // Devrait afficher l'élément
 initScripts();
-/* Activation Search_Bar */
-let Search_Bar = document.getElementById('Search_Recipe');
-let Search_Recipe_Button = document.getElementById('Search_Recipe_Button');
-
-Search_Recipe_Button.addEventListener("click", Research_Recipe);
-
-Search_Bar.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-        Research_Recipe();
-    }
-});
-
-
-function Research_Recipe() {
-    let User_Research = document.getElementById('Search_Recipe').value;
-    localStorage.setItem('userResearch', "Recherche : " + User_Research);
-    window.location.href = '/Main/Recipes/Recipe_Search.html';
-    User_Research_Value = localStorage.getItem('userResearch');
-    Title_Page_Research.innerText = "Recherche " + User_Research_Value;
-    Label_Recipes_Search.innerText = User_Research_Value;
-}
 
 
 function initScripts() {

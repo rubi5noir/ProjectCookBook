@@ -1,4 +1,5 @@
-﻿@section Scripts {
+﻿@model List<Recette>
+@section Scripts {
     <script src="~/js/Recettes_Search.js" defer></script>
 }
 
@@ -35,4 +36,8 @@
 </div>
 
 <div id="Body_Recipes" class="Vignette_Recipes">
+    @foreach (var recette in Model)
+    {
+        @await Html.PartialAsync("_RecipeBook", recette)
+    }
 </div>
