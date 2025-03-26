@@ -10,6 +10,8 @@ using System.Security.Claims;
 using System.Collections.Immutable;
 using Microsoft.AspNetCore.Authorization;
 using System.Data.Common;
+using System.Data;
+using NpgsqlTypes;
 
 namespace ProjectCookBook.Controllers
 {
@@ -827,9 +829,15 @@ namespace ProjectCookBook.Controllers
         }
 
         [HttpGet]
-        public IActionResult Search(List<Recette> recettesgrouped)
+        public IActionResult Search()
         {
-            return View(recettesgrouped);
+            RecetteRechercheViewModel recetteRechercheViewModel = new RecetteRechercheViewModel();
+
+            recetteRechercheViewModel.ingredients = CreationSelectIngredient();
+            recetteRechercheViewModel.categories = CreationSelectCategorie();
+            recetteRechercheViewModel.recherche = "";
+
+            return View(recetteRechercheViewModel);
         }
 
         [HttpPost]
@@ -895,8 +903,131 @@ namespace ProjectCookBook.Controllers
                             return groupedRecette;
                         }).ToList();
 
-            return View("Search", recettesgrouped);
+            RecetteRechercheViewModel recetteRechercheViewModel = new RecetteRechercheViewModel();
+            recetteRechercheViewModel.ingredients = CreationSelectIngredient();
+            recetteRechercheViewModel.categories = CreationSelectCategorie();
+            recetteRechercheViewModel.recettes = recettesgrouped;
+            recetteRechercheViewModel.recherche = Search_Recipe;
+
+            return View("Search", recetteRechercheViewModel);
         }
+
+        [HttpPost]
+        public IActionResult RechercheFiltrer(RecetteRechercheViewModel recetteRechercheViewModel)
+        {
+            string queryrechercheutilisateur = "SELECT recettes.id " +
+                "FROM RECETTES " +
+                "INNER JOIN UTILISATEURS ON UTILISATEURS.ID = ID_UTILISATEUR " +
+                "INNER JOIN CATEGORIES_RECETTES ON CATEGORIES_RECETTES.ID_RECETTE = recettes.ID " +
+                "INNER JOIN CATEGORIES ON categories.id = CATEGORIES_RECETTES.ID_CATEGORIE " +
+                "INNER JOIN INGREDIENTS_RECETTES ON INGREDIENTS_RECETTES.ID_RECETTE = recettes.ID " +
+                "INNER JOIN INGREDIENTS ON INGREDIENTS.ID = ID_INGREDIENT " +
+                "WHERE (RECETTES.NOM LIKE @recherche " +
+                "OR UTILISATEURS.IDENTIFIANT LIKE @recherche " +
+                "OR CATEGORIES.NOM LIKE @recherche " +
+                "OR INGREDIENTS.NOM LIKE @recherche)";
+
+            if (recetteRechercheViewModel.FilterIngredients.Any())
+            {
+                queryrechercheutilisateur += " AND ingredients.id = ANY(@ingredients)";
+            }
+
+            if (recetteRechercheViewModel.FilterCategorie.Any())
+            {
+                queryrechercheutilisateur += " AND categories.id = ANY(@categories)";
+            }
+
+            if (recetteRechercheViewModel.FilterIngredients.Any() || recetteRechercheViewModel.FilterCategorie.Any())
+            {
+                queryrechercheutilisateur += " GROUP BY recettes.id";
+
+                if (recetteRechercheViewModel.FilterIngredients.Any() && recetteRechercheViewModel.FilterCategorie.Any())
+                {
+                    queryrechercheutilisateur += " Having count(distinct ingredients.id) = @ingredientCount AND count(distinct categories.id) = @categorieCount";
+                }
+
+                else if (recetteRechercheViewModel.FilterIngredients.Any())
+                {
+                    queryrechercheutilisateur += " Having count(distinct ingredients.id) = @ingredientCount";
+                }
+
+                else if (recetteRechercheViewModel.FilterCategorie.Any())
+                {
+                    queryrechercheutilisateur += " Having count(distinct categories.id) = @categorieCount";
+                }
+            }
+
+            string queryrecettes = "Select * from Recettes " +
+                       "LEFT join avis on avis.id_recette = recettes.id " +
+                       "where recettes.id = ANY(@ids) " +
+                       "order by id asc";
+
+            List<int> recettes_ids = new List<int>();
+            List<Recette> recettesgrouped;
+            List<Recette> recettes;
+
+            using (var connexion = new NpgsqlConnection(_connexionString))
+            {
+                try
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("recherche", "%" + recetteRechercheViewModel.recherche + "%");
+                    if (recetteRechercheViewModel.FilterIngredients.Any())
+                    {
+                        parameters.Add("ingredients", recetteRechercheViewModel.FilterIngredients.ToArray());
+                        parameters.Add("ingredientCount", recetteRechercheViewModel.FilterIngredients.Count);
+                    }
+
+                    if (recetteRechercheViewModel.FilterCategorie.Any())
+                    {
+                        parameters.Add("categories", recetteRechercheViewModel.FilterCategorie.ToArray());
+                        parameters.Add("categorieCount", recetteRechercheViewModel.FilterCategorie.Count);
+                    }
+
+                    recettes_ids = connexion.Query<int>(queryrechercheutilisateur, parameters).ToList();
+
+                    List<object> parametersRecettes = new List<object>();
+                    foreach (var id in recettes_ids)
+                    {
+                        parametersRecettes.Add(
+                            new
+                            {
+                                id = id
+                            });
+                    }
+
+                    recettes = connexion.Query<Recette, Avis, Recette>(queryrecettes, (recette, avis) =>
+                    {
+                        recette.avis.Add(avis);
+                        return recette;
+                    },
+                    new { ids = recettes_ids.ToArray() },
+                    splitOn: "id, id_recette").ToList();
+                }
+                catch (Exception)
+                {
+                    return NotFound();
+                }
+            }
+
+            recettesgrouped = recettes.GroupBy(R => R.id).Select(g =>
+            {
+                Recette groupedRecette = g.First();
+
+                groupedRecette.avis = g.SelectMany(R => R.avis).ToList();
+
+                return groupedRecette;
+            }).ToList();
+
+            recetteRechercheViewModel.ingredients = CreationSelectIngredient();
+            recetteRechercheViewModel.categories = CreationSelectCategorie();
+            recetteRechercheViewModel.recettes = recettesgrouped;
+
+            return View("Search", recetteRechercheViewModel);
+        }
+
+
+
 
         public IActionResult MesRecettes()
         {

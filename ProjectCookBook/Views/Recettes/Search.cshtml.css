@@ -106,6 +106,7 @@
 
 .menuFilterOpen {
     right: 0;
+    top: 300px;
 }
 
 .menuFilter > div {
