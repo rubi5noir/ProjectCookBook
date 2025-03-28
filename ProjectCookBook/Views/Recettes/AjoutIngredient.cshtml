@@ -3,10 +3,12 @@
     <partial name="_ValidationScriptsPartial" />
 }
 
-<form>
+<form asp-action="AjoutIngredient" asp-controller="Recettes" method="post">
     <fieldset>
-        <label aso-for="@Model.nom">Ingrédient a créer : </label>
-        <input aso-for="@Model.nom" />
+        <h1>@TempData["ValidateMessage"]</h1>
+        <label asp-for="@Model.nom">Ingrédient a créer : </label>
+        <input asp-for="@Model.nom" />
+        <input type="submit" value="Valider" />
     </fieldset>
 </form>
 
