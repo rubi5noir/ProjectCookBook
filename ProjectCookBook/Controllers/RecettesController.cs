@@ -22,7 +22,7 @@ namespace ProjectCookBook.Controllers
 
 
         /// <summary>
-        /// Constructeur de LivresController
+        /// Constructeur de RecettesController
         /// </summary>
         /// <param name="configuration">configuration de l'application</param>
         /// <exception cref="Exception"></exception>
@@ -39,7 +39,10 @@ namespace ProjectCookBook.Controllers
             /* Transfert des validate message */
         }
 
-
+        /// <summary>
+        /// Retourne la View Recettes avec la liste de toutes les recettes
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Recettes()
         {
             string query = "Select * from Recettes" +
@@ -57,6 +60,11 @@ namespace ProjectCookBook.Controllers
             return View(recettes);
         }
 
+        /// <summary>
+        /// Retourne la View Detail avec les informations de la recette spécifiée
+        /// </summary>
+        /// <param name="id">id de recette</param>
+        /// <returns></returns>
         public IActionResult Detail(int id)
         {
 
@@ -159,6 +167,11 @@ namespace ProjectCookBook.Controllers
             return View(recette);
         }
 
+        /// <summary>
+        /// Ajoute un avis a la recette spécifiée
+        /// </summary>
+        /// <param name="recette"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult AjouterAvis(Recette recette)
         {
@@ -198,6 +211,10 @@ namespace ProjectCookBook.Controllers
             return RedirectToAction("Detail", new { id = recette.id });
         }
 
+        /// <summary>
+        /// Crée une liste d'ingrédients
+        /// </summary>
+        /// <returns></returns>
         private List<Ingredient> CreationSelectIngredient()
         {
             string queryIngredients = "Select * from Ingredients";
@@ -209,6 +226,10 @@ namespace ProjectCookBook.Controllers
             return Ingredients;
         }
 
+        /// <summary>
+        /// Crée une liste de catégories
+        /// </summary>
+        /// <returns></returns>
         private List<Categorie> CreationSelectCategorie()
         {
             string queryCategories = "Select * from Categories";
@@ -220,6 +241,11 @@ namespace ProjectCookBook.Controllers
             return Categories;
         }
 
+
+        /// <summary>
+        /// Retourne la View Editeur pour ajouter une recette
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Ajouter()
         {
@@ -242,9 +268,14 @@ namespace ProjectCookBook.Controllers
             ViewBag.select_categories = categories;
 
             r.InitialisationSelects();
-            return View("Form", r);
+            return View("Editeur", r);
         }
 
+        /// <summary>
+        /// Ajoute une nouvelle recette a la base de données
+        /// </summary>
+        /// <param name="recetteacreer"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Ajouter([FromForm] RecetteFormViewModel recetteacreer)
         {
@@ -334,11 +365,13 @@ namespace ProjectCookBook.Controllers
                         {
                             /* Insertion de la recette */
                             string insertRecette = "INSERT INTO recettes (nom, description, temps_preparation, temps_cuisson, difficulte, id_utilisateur, img) VALUES (@nom, @description, @temps_preparation, @temps_cuisson, @difficulte, @id_utilisateur, @img) RETURNING id";
+                            
                             var parametersRecette = new { nom = recette.nom, description = recette.description, temps_preparation = recette.temps_preparation, temps_cuisson = recette.temps_cuisson, difficulte = recette.difficulte, id_utilisateur = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)), recette.img };
                             recette.id = connection.ExecuteScalarAsync<int>(insertRecette, parametersRecette, transaction).Result;
 
                             /* Insertion des etapes */
                             string insertEtapes = "INSERT INTO etapes (numero, id_recette, texte) VALUES (@numero, @id_recette, @texte)";
+                            
                             List<object> parametersEtapes = new List<object>();
                             var i = 0;
                             foreach (var etape in recette.etapes)
@@ -356,6 +389,7 @@ namespace ProjectCookBook.Controllers
 
                             /* Insertion des ingredients */
                             string insertIngredients = "INSERT INTO ingredients_recettes (id_ingredient, id_recette, quantite) VALUES (@id_ingredient, @id_recette, @quantite)";
+                            
                             List<object> parametersIngredients = new List<object>();
                             foreach (var ingredient in recette.ingredients)
                             {
@@ -371,6 +405,7 @@ namespace ProjectCookBook.Controllers
 
                             /* insertion des categories */
                             string insertCategories = "INSERT INTO categories_recettes (id_categorie, id_recette) VALUES (@id_categorie, @id_recette)";
+                            
                             List<object> parametersCategories = new List<object>();
                             foreach (var categorie in recette.categories)
                             {
@@ -448,10 +483,15 @@ namespace ProjectCookBook.Controllers
 
                 recetteacreer.InitialisationSelects();
 
-                return View("Form", recetteacreer);
+                return View("Editeur", recetteacreer);
             }
         }
 
+        /// <summary>
+        /// Retourne la View Editeur pour modifier une recette
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Editer(int id)
         {
@@ -509,6 +549,7 @@ namespace ProjectCookBook.Controllers
                 {
                     return NotFound();
                 }
+
                 recette = recettes.GroupBy(R => R.id).Select(g =>
                 {
                     Recette groupedRecette = g.First();
@@ -571,13 +612,23 @@ namespace ProjectCookBook.Controllers
                 recetteFormViewModel.InitialisationSelects();
 
             }
-            return View("Form", recetteFormViewModel);
+            return View("Editeur", recetteFormViewModel);
 
         }
 
+        /// <summary>
+        /// Modifie une recette dans la base de données
+        /// </summary>
+        /// <param name="recetteamodifier"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Editer(RecetteFormViewModel recetteamodifier)
         {
+            if (User.FindFirstValue(ClaimTypes.Role) == "False" && (int)recetteamodifier.createur_id != int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)))
+            {
+                TempData["Access"] = "Vous n'avez pas les droits pour faire cette action";
+                return RedirectToAction("Detail", new { id = (int)recetteamodifier.id });
+            }
             recetteamodifier.recette = new Recette();
 
             /* Suppression de la verification les variables non essentieles */
@@ -680,6 +731,7 @@ namespace ProjectCookBook.Controllers
                             "id_utilisateur = @id_utilisateur, " +
                             "img = @img " +
                             "where id = @id";
+
                             var parametersRecette = new { nom = recette.nom, description = recette.description, temps_preparation = recette.temps_preparation, temps_cuisson = recette.temps_cuisson, difficulte = recette.difficulte, id_utilisateur = recette.Createur.id, recette.img, id = recette.id };
                             connection.Execute(updateRecette, parametersRecette, transaction);
 
@@ -738,6 +790,7 @@ namespace ProjectCookBook.Controllers
                             // Insertion des nouvelles catégories
                             string insertCategories = "INSERT INTO categories_recettes (id_categorie, id_recette) " +
                                 "VALUES (@id_categorie, @id_recette)";
+
                             List<object> parametersCategories = new List<object>();
                             foreach (var categorie in recette.categories)
                             {
@@ -824,10 +877,14 @@ namespace ProjectCookBook.Controllers
 
                 recetteamodifier.InitialisationSelects();
 
-                return View("Form", recetteamodifier);
+                return View("Editeur", recetteamodifier);
             }
         }
 
+        /// <summary>
+        /// Retourne la View Search
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Search()
         {
@@ -840,6 +897,11 @@ namespace ProjectCookBook.Controllers
             return View(recetteRechercheViewModel);
         }
 
+        /// <summary>
+        /// Retourne la View Search selon la recherche spécifiée
+        /// </summary>
+        /// <param name="Search_Recipe"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Search(string Search_Recipe)
         {
@@ -912,6 +974,11 @@ namespace ProjectCookBook.Controllers
             return View("Search", recetteRechercheViewModel);
         }
 
+        /// <summary>
+        /// Retourne la View Search selon les filtres spécifiés
+        /// </summary>
+        /// <param name="recetteRechercheViewModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult RechercheFiltrer(RecetteRechercheViewModel recetteRechercheViewModel)
         {
@@ -1026,9 +1093,10 @@ namespace ProjectCookBook.Controllers
             return View("Search", recetteRechercheViewModel);
         }
 
-
-
-
+        /// <summary>
+        /// Retourne la View MesRecettes avec les recettes de l'utilisateur connecté
+        /// </summary>
+        /// <returns></returns>
         public IActionResult MesRecettes()
         {
             string query = "Select * from Recettes " +

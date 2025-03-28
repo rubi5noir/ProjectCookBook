@@ -20,7 +20,7 @@ namespace ProjectCookBook.Controllers
 
 
         /// <summary>
-        /// Constructeur de LivresController
+        /// Constructeur de ComptesController
         /// </summary>
         /// <param name="configuration">configuration de l'application</param>
         /// <exception cref="Exception"></exception>
@@ -35,6 +35,11 @@ namespace ProjectCookBook.Controllers
             }
         }
 
+        /// <summary>
+        /// Retourne la View Compte avec les informations de l'utilisateur
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IActionResult Compte(int id)
         {
             string query = "Select * from Utilisateurs where id = @id";
@@ -46,14 +51,19 @@ namespace ProjectCookBook.Controllers
             return View(account);
         }
 
+        /// <summary>
+        /// Retourne la View Admin si l'utilisateur est un admin
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "Admin")]
         public IActionResult Admin()
         {
             return View();
         }
 
-        
+
         /// <summary>
-        /// Retourne le forulaire d'inscription
+        /// Retourne la View Sign_Up_In avec le forulaire d'inscription et de connexion
         /// </summary>
         /// <returns></returns>
         [AllowAnonymous]
@@ -63,6 +73,11 @@ namespace ProjectCookBook.Controllers
             return View("Sign_Up_In");
         }
 
+        /// <summary>
+        /// Inscription de l'utilisateur et redirection vers la page de connexion
+        /// </summary>
+        /// <param name="utilisateur"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         public IActionResult SignUp([FromForm] Compte utilisateur)
@@ -87,7 +102,7 @@ namespace ProjectCookBook.Controllers
                     if (RowsAffected == 1)
                     {
                         TempData["ValidateMessage"] = "Your subscribtion is done. Please log in with your credentials.";
-                        return RedirectToAction("Sign_Up_In");
+                        return RedirectToAction("Login");
 
                     }
                     else
@@ -99,6 +114,11 @@ namespace ProjectCookBook.Controllers
             }
         }
 
+        /// <summary>
+        /// Connecte l'utilisateur et le redirige vers la page d'accueil ou la page depuis laquelle il a été redirigé
+        /// </summary>
+        /// <param name="utilisateur"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> SignIn([FromForm] Compte utilisateur)
@@ -111,7 +131,7 @@ namespace ProjectCookBook.Controllers
                 ViewData["ValidateMessage"] = "Email ou mot de passe invalide.";
                 return View("Sign_Up_In");
             }
-            string query = "SELECT id, identifiant, email, password FROM Utilisateurs WHERE email = @email";
+            string query = "SELECT id, identifiant, email, password, admin FROM Utilisateurs WHERE email = @email";
             using (var connexion = new NpgsqlConnection(_connexionString))
             {
                 Compte utilisateurDB;
@@ -132,7 +152,8 @@ namespace ProjectCookBook.Controllers
                      {
                          new Claim(ClaimTypes.Email, utilisateur.email),
                          new Claim(ClaimTypes.GivenName, utilisateurDB.identifiant),
-                         new Claim(ClaimTypes.NameIdentifier, utilisateurDB.id.ToString())
+                         new Claim(ClaimTypes.NameIdentifier, utilisateurDB.id.ToString()),
+                         new Claim(ClaimTypes.Role, utilisateurDB.admin.ToString())
 
                      };
 
@@ -162,7 +183,10 @@ namespace ProjectCookBook.Controllers
             }
         }
 
-        
+        /// <summary>
+        /// Déconnecte l'utilisateur et le redirige vers la page de connexion
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

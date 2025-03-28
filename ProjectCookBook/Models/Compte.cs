@@ -14,5 +14,8 @@ namespace ProjectCookBook.Models
 
         [DataType(DataType.Password)]
         public string password { get; set; }
+
+        public bool admin { get; set; }
+        public string Role => admin ? "Admin" : "User";
     }
 }

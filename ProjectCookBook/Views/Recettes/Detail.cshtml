@@ -32,7 +32,7 @@
         </ul>
     </div>
 
-    
+
 
     <div id="Recipe_Info_Preparation" class="Recipe_Right_Part">
 
@@ -55,7 +55,16 @@
     </div>
 
     <div>
-        <button type="button" onclick="window.location.href='@Url.Action("Editer", "Recettes", new { id = Model.id })'">Modifier recette</button>
+        @using System.Security.Claims
+
+        @if (User.FindFirst(ClaimTypes.Role)?.Value == "True" || (int)Model.Createur.id == int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value))
+        {
+            <button type="button" onclick="window.location.href='@Url.Action("Editer", "Recettes", new { id = Model.id })'">Modifier recette</button>
+            @if (TempData["Access"] is not null)
+            {
+                <h3>@TempData["Access"]</h3>
+            }
+        }
     </div>
 
     <div class="Recipe_Right_Part">

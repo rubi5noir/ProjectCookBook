@@ -18,7 +18,7 @@ namespace ProjectCookBook.Controllers
 
 
         /// <summary>
-        /// Constructeur de LivresController
+        /// Constructeur de HomeController
         /// </summary>
         /// <param name="configuration">configuration de l'application</param>
         /// <exception cref="Exception"></exception>
@@ -46,7 +46,8 @@ namespace ProjectCookBook.Controllers
             string querymesrecettes = "Select * from Recettes " +
                            "left join avis on avis.id_recette = recettes.id " +
                            "Where recettes.id_utilisateur = @createur " +
-                           "order by id asc";
+                           "order by id asc " +
+                           "limit 25";
             List<Recette> mesrecettesgrouped;
             List<Recette> mesrecettes;
             try
@@ -113,7 +114,8 @@ namespace ProjectCookBook.Controllers
 
         public IActionResult GetCategories()
         {
-            string query = "Select * from Categories";
+            string query = "Select * from Categories " +
+                "limit 15";
             List<Categorie> categories;
             try
             {
