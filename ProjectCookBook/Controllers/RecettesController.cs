@@ -1135,6 +1135,84 @@ namespace ProjectCookBook.Controllers
 
             return View(recettesgrouped);
         }
+
+        /// <summary>
+        /// Retourne le formulaire d'ajout d'ingrédient
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult AjoutIngredient()
+        {
+            Ingredient ingredient = new Ingredient();
+            return View(ingredient);
+        }
+
+        /// <summary>
+        /// Ajoute un ingrédient à la base de données
+        /// </summary>
+        /// <param name="ingredient"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult AjoutIngredient([FromForm] Ingredient ingredient)
+        {
+            string query = "INSERT INTO Ingredients (nom) VALUES (@nom)";
+
+            using (var connexion = new NpgsqlConnection(_connexionString))
+            {
+                int RowsAffected = connexion.Execute(query, new { nom = ingredient.nom });
+                if (RowsAffected == 1)
+                {
+                    TempData["ValidateMessage"] = "Ingrédient ajouter";
+                    return RedirectToAction("AjoutIngredient");
+                }
+                else
+                {
+                    ViewData["ValidateMessage"] = "Error lors de l'ajout de l'ingrédient.";
+                    return View(ingredient);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Retourne le formulaire d'ajout de catégorie
+        /// </summary>
+        /// <returns></returns>
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult AjoutCategorie()
+        {
+            Categorie categorie = new Categorie();
+            return View(categorie);
+        }
+
+        /// <summary>
+        /// Ajoute une catégorie à la base de données
+        /// </summary>
+        /// <param name="categorie"></param>
+        /// <returns></returns>
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult AjoutCategorie([FromForm] Categorie categorie)
+        {
+            string query = "INSERT INTO Categories (nom) VALUES (@nom)";
+
+            using (var connexion = new NpgsqlConnection(_connexionString))
+            {
+                int RowsAffected = connexion.Execute(query, new { nom = categorie.nom });
+                if (RowsAffected == 1)
+                {
+                    TempData["ValidateMessage"] = "Catégorie ajouter";
+                    return RedirectToAction("AjoutCategorie");
+                }
+                else
+                {
+                    ViewData["ValidateMessage"] = "Error lors de l'ajout de la catégorie.";
+                    return View(categorie);
+                }
+            }
+        }
     }
 }
 

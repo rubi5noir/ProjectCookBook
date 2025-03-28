@@ -8,6 +8,7 @@
             <li>@Model.nom</li>
             <li>@Model.prenom</li>
             <li>@Model.email</li>
+            <li>@Model.Role</li>
         </ul>
     </div>
 
@@ -16,7 +17,7 @@
         <button onclick="changeTheme('Dark')">Sombre</button>
         <button onclick="changeTheme('Rubisnoir')">Custom</button>
 
-        <a href="/Main/Accueil/Admin.html">Admin</a>
+        <button type="button" onclick="window.location.href='@Url.Action("Admin", "Comptes")'">Admin</button>
         @if (User.Identity.IsAuthenticated)
         {
             <button type="button" onclick="window.location.href='@Url.Action("LogOut", "Comptes")'">Déconnexion</button>

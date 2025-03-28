@@ -61,7 +61,6 @@ namespace ProjectCookBook.Controllers
             return View();
         }
 
-
         /// <summary>
         /// Retourne la View Sign_Up_In avec le forulaire d'inscription et de connexion
         /// </summary>
@@ -153,7 +152,7 @@ namespace ProjectCookBook.Controllers
                          new Claim(ClaimTypes.Email, utilisateur.email),
                          new Claim(ClaimTypes.GivenName, utilisateurDB.identifiant),
                          new Claim(ClaimTypes.NameIdentifier, utilisateurDB.id.ToString()),
-                         new Claim(ClaimTypes.Role, utilisateurDB.admin.ToString())
+                         new Claim(ClaimTypes.Role, utilisateurDB.Role)
 
                      };
 
