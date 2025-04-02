@@ -1,10 +1,6 @@
-﻿@model List<Categorie>
-@{
-}
+﻿@model Categorie
 
-@foreach (Categorie categorie in Model)
-{
-    <div class="Recipe_Categorie" data-url="@Url.Action("Categorie", "Recettes", new { id = categorie.id })">
-        <h2>@categorie.nom</h2>
+    <div class="Recipe_Categorie" data-url="@Url.Action("SearchOnClick", "Recettes", new { Search_Recipe = Model.nom })">
+        <h2>@Model.nom</h2>
     </div>
-}
+

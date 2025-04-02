@@ -197,5 +197,65 @@ div#copyright {
 }
 
 img#Logo_Copyright {
-    width: 2%;
+    max-width: 25px;
+}
+
+
+@media (max-width: 426px) {
+
+    /* Search Bar */
+    div#Header_Search_Bar {
+        border-right: solid;
+        justify-content: right;
+        right: 0%;
+    }
+
+
+    /* Account Button */
+    div#Header_Account {
+        display: none;
+    }
+
+
+    /*Footer*/
+    div#Footer {
+        height: auto;
+    }
+
+    div#Complementary_Intel {
+        height: auto;
+        width: 55vw;
+    }
+
+    hr {
+        margin: 5px;
+    }
+
+    nav#Footer_Nav {
+        display: flex;
+        align-content: center;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 320px)
+{
+    /* Search Bar */
+    div#Header_Search_Bar {
+        width: 65vw;
+    }
+
+    #Search_Recipe {
+        width: 50%;
+    }
+
+
+    /*Footer*/
+    div#Complementary_Intel {
+        width: 48vw;
+    }
+
+    nav#Footer_Nav {
+        width: 48vw;
+    }
 }

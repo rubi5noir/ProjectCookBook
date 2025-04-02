@@ -45,7 +45,7 @@ namespace ProjectCookBook.Controllers
         /// <returns></returns>
         public IActionResult Recettes()
         {
-            string query = "Select * from Recettes" +
+            string query = "Select * from Recettes " +
                            "left join Avis on Avis.id_recette = Recettes.id";
             List<Recette> recettes;
             using (var connexion = new NpgsqlConnection(_connexionString))
@@ -55,7 +55,7 @@ namespace ProjectCookBook.Controllers
                     recette.avis.Add(avis);
                     return recette;
                 },
-                splitOn: "id").ToList();
+                splitOn: "id, id_recette").ToList();
             }
             return View(recettes);
         }
@@ -217,7 +217,7 @@ namespace ProjectCookBook.Controllers
         /// <returns></returns>
         private List<Ingredient> CreationSelectIngredient()
         {
-            string queryIngredients = "Select * from Ingredients";
+            string queryIngredients = "Select * from Ingredients order by nom asc";
             List<Ingredient> Ingredients;
             using (var connexion = new NpgsqlConnection(_connexionString))
             {
@@ -232,7 +232,7 @@ namespace ProjectCookBook.Controllers
         /// <returns></returns>
         private List<Categorie> CreationSelectCategorie()
         {
-            string queryCategories = "Select * from Categories";
+            string queryCategories = "Select * from Categories order by nom asc";
             List<Categorie> Categories;
             using (var connexion = new NpgsqlConnection(_connexionString))
             {
@@ -365,13 +365,13 @@ namespace ProjectCookBook.Controllers
                         {
                             /* Insertion de la recette */
                             string insertRecette = "INSERT INTO recettes (nom, description, temps_preparation, temps_cuisson, difficulte, id_utilisateur, img) VALUES (@nom, @description, @temps_preparation, @temps_cuisson, @difficulte, @id_utilisateur, @img) RETURNING id";
-                            
+
                             var parametersRecette = new { nom = recette.nom, description = recette.description, temps_preparation = recette.temps_preparation, temps_cuisson = recette.temps_cuisson, difficulte = recette.difficulte, id_utilisateur = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)), recette.img };
                             recette.id = connection.ExecuteScalarAsync<int>(insertRecette, parametersRecette, transaction).Result;
 
                             /* Insertion des etapes */
                             string insertEtapes = "INSERT INTO etapes (numero, id_recette, texte) VALUES (@numero, @id_recette, @texte)";
-                            
+
                             List<object> parametersEtapes = new List<object>();
                             var i = 0;
                             foreach (var etape in recette.etapes)
@@ -389,7 +389,7 @@ namespace ProjectCookBook.Controllers
 
                             /* Insertion des ingredients */
                             string insertIngredients = "INSERT INTO ingredients_recettes (id_ingredient, id_recette, quantite) VALUES (@id_ingredient, @id_recette, @quantite)";
-                            
+
                             List<object> parametersIngredients = new List<object>();
                             foreach (var ingredient in recette.ingredients)
                             {
@@ -405,7 +405,7 @@ namespace ProjectCookBook.Controllers
 
                             /* insertion des categories */
                             string insertCategories = "INSERT INTO categories_recettes (id_categorie, id_recette) VALUES (@id_categorie, @id_recette)";
-                            
+
                             List<object> parametersCategories = new List<object>();
                             foreach (var categorie in recette.categories)
                             {
@@ -419,6 +419,7 @@ namespace ProjectCookBook.Controllers
                             connection.Execute(insertCategories, parametersCategories, transaction);
 
                             transaction.Commit();
+                            return RedirectToAction("Detail", new { id = recette.id });
                         }
                         catch (Exception ex)
                         {
@@ -430,62 +431,63 @@ namespace ProjectCookBook.Controllers
                             {
                                 System.IO.File.Delete("wwwroot" + filePath);
                             }
+
                         }
                     }
                 }
 
-                return RedirectToAction("Detail", new { id = recette.id });
+
             }
-            else
+
+            var errors = ModelState.Where(x => x.Value.Errors.Count > 0).ToDictionary
+                (
+                    k => k.Key,
+                    v => v.Value.Errors.Select(e => e.ErrorMessage).ToList()
+                );
+
+
+            var ingredientsKeys = ModelState.Keys.Where(key => key.Contains("ingredients")).ToList();
+            if (ingredientsKeys.Any())
             {
-                var errors = ModelState.Where(x => x.Value.Errors.Count > 0).ToDictionary
-                    (
-                        k => k.Key,
-                        v => v.Value.Errors.Select(e => e.ErrorMessage).ToList()
-                    );
-
-
-                var ingredientsKeys = ModelState.Keys.Where(key => key.Contains("ingredients")).ToList();
-                if (ingredientsKeys.Any())
-                {
-                    TempData["ingredient"] = "Veuillez vérifier les informations des ingrédients";
-                }
-
-                var etapesKeys = ModelState.Keys.Where(key => key.Contains("etapes")).ToList();
-                if (etapesKeys.Any())
-                {
-                    TempData["etape"] = "Veuillez vérifier les informations des etapes";
-                }
-
-                var categoriesKeys = ModelState.Keys.Where(key => key.Contains("categories")).ToList();
-                if (categoriesKeys.Any())
-                {
-                    TempData["categorie"] = "Veuillez vérifier les informations des categories";
-                }
-
-
-                List<Ingredient> ingredients = CreationSelectIngredient();
-                List<Categorie> categories = CreationSelectCategorie();
-
-                recetteacreer.select_ingredients_list = ingredients.Select(i => new SelectListItem
-                {
-                    Value = i.id.ToString(),
-                    Text = i.nom
-                }).ToList();
-                ViewBag.select_ingredients = ingredients;
-
-                recetteacreer.select_categories_list = categories.Select(i => new SelectListItem
-                {
-                    Value = i.id.ToString(),
-                    Text = i.nom
-                }).ToList();
-                ViewBag.select_categories = categories;
-
-                recetteacreer.InitialisationSelects();
-
-                return View("Editeur", recetteacreer);
+                TempData["ingredient"] = "Veuillez vérifier les informations des ingrédients";
             }
+
+            var etapesKeys = ModelState.Keys.Where(key => key.Contains("etapes")).ToList();
+            if (etapesKeys.Any())
+            {
+                TempData["etape"] = "Veuillez vérifier les informations des etapes";
+            }
+
+            var categoriesKeys = ModelState.Keys.Where(key => key.Contains("categories")).ToList();
+            if (categoriesKeys.Any())
+            {
+                TempData["categorie"] = "Veuillez vérifier les informations des categories";
+            }
+
+
+            List<Ingredient> ingredients = CreationSelectIngredient();
+            List<Categorie> categories = CreationSelectCategorie();
+
+            recetteacreer.select_ingredients_list = ingredients.Select(i => new SelectListItem
+            {
+                Value = i.id.ToString(),
+                Text = i.nom
+            }).ToList();
+            ViewBag.select_ingredients = ingredients;
+
+            recetteacreer.select_categories_list = categories.Select(i => new SelectListItem
+            {
+                Value = i.id.ToString(),
+                Text = i.nom
+            }).ToList();
+            ViewBag.select_categories = categories;
+
+            recetteacreer.InitialisationSelects();
+
+            return View("Editeur", recetteacreer);
         }
+
+
 
         /// <summary>
         /// Retourne la View Editeur pour modifier une recette
@@ -611,8 +613,14 @@ namespace ProjectCookBook.Controllers
 
                 recetteFormViewModel.InitialisationSelects();
 
+                if (User.FindFirstValue(ClaimTypes.Role) == "Admin" || recetteFormViewModel.createur_id == int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)))
+                {
+                    return View("Editeur", recetteFormViewModel);
+                }
+
             }
-            return View("Editeur", recetteFormViewModel);
+
+            return Forbid();
 
         }
 
@@ -624,10 +632,9 @@ namespace ProjectCookBook.Controllers
         [HttpPost]
         public IActionResult Editer(RecetteFormViewModel recetteamodifier)
         {
-            if (User.FindFirstValue(ClaimTypes.Role) == "False" && (int)recetteamodifier.createur_id != int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)))
+            if (User.FindFirstValue(ClaimTypes.Role) != "Admin" && recetteamodifier.createur_id != int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)))
             {
-                TempData["Access"] = "Vous n'avez pas les droits pour faire cette action";
-                return RedirectToAction("Detail", new { id = (int)recetteamodifier.id });
+                return Forbid();
             }
             recetteamodifier.recette = new Recette();
 
@@ -898,6 +905,17 @@ namespace ProjectCookBook.Controllers
         }
 
         /// <summary>
+        /// Passerelle depuis les vignettes categorie et la page de recherche
+        /// </summary>
+        /// <param name="Search_Recipe"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult SearchOnClick(string Search_Recipe = "")
+        {
+            return Search(Search_Recipe); // Réutilise la logique du POST
+        }
+
+        /// <summary>
         /// Retourne la View Search selon la recherche spécifiée
         /// </summary>
         /// <param name="Search_Recipe"></param>
@@ -1158,21 +1176,31 @@ namespace ProjectCookBook.Controllers
         public IActionResult AjoutIngredient([FromForm] Ingredient ingredient)
         {
             string query = "INSERT INTO Ingredients (nom) VALUES (@nom)";
-
-            using (var connexion = new NpgsqlConnection(_connexionString))
+            try
             {
-                int RowsAffected = connexion.Execute(query, new { nom = ingredient.nom });
-                if (RowsAffected == 1)
+                using (var connexion = new NpgsqlConnection(_connexionString))
                 {
-                    TempData["ValidateMessage"] = "Ingrédient ajouter";
-                    return RedirectToAction("AjoutIngredient");
-                }
-                else
-                {
-                    ViewData["ValidateMessage"] = "Error lors de l'ajout de l'ingrédient.";
-                    return View(ingredient);
+                    int RowsAffected = connexion.Execute(query, new { nom = ingredient.nom });
+                    if (RowsAffected == 1)
+                    {
+                        TempData["ValidateMessage"] = "Ingrédient ajouter";
+                        return RedirectToAction("AjoutIngredient");
+                    }
+                    else
+                    {
+                        TempData["ValidateMessage"] = "Erreur lors de l'ajout de l'ingrédient.";
+                        return View(ingredient);
+                    }
                 }
             }
+            catch (NpgsqlException e)
+            {
+                if (e.HResult == -2147467259)
+                {
+                    TempData["ValidateMessage"] = "Ingrédient déja existant dans la base de donnée";
+                }
+            }
+            return View(ingredient);
         }
 
         /// <summary>
@@ -1198,19 +1226,31 @@ namespace ProjectCookBook.Controllers
         {
             string query = "INSERT INTO Categories (nom) VALUES (@nom)";
 
-            using (var connexion = new NpgsqlConnection(_connexionString))
+            try
             {
-                int RowsAffected = connexion.Execute(query, new { nom = categorie.nom });
-                if (RowsAffected == 1)
+                using (var connexion = new NpgsqlConnection(_connexionString))
                 {
-                    TempData["ValidateMessage"] = "Catégorie ajouter";
-                    return RedirectToAction("AjoutCategorie");
+                    int RowsAffected = connexion.Execute(query, new { nom = categorie.nom });
+                    if (RowsAffected == 1)
+                    {
+                        TempData["ValidateMessage"] = "Catégorie ajouter";
+                        return RedirectToAction("AjoutCategorie");
+                    }
+                    else
+                    {
+                        ViewData["ValidateMessage"] = "Erreur lors de l'ajout de la catégorie.";
+                        return View(categorie);
+                    }
                 }
-                else
+            }
+
+            catch (NpgsqlException e)
+            {
+                if (e.HResult == -2147467259)
                 {
-                    ViewData["ValidateMessage"] = "Error lors de l'ajout de la catégorie.";
-                    return View(categorie);
+                    TempData["ValidateMessage"] = "Catégorie déja existante dans la base de donnée";
                 }
+                return View(categorie);
             }
         }
     }

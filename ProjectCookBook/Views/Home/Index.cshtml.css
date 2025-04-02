@@ -15,7 +15,6 @@ div.Scroll_Width_Div {
     padding: 10px 0;
     gap: 10px;
     width: 100%; /* S'adapte au parent */
-    height: 25vh;
     /*white-space: nowrap;*/ /* Empêche les éléments de passer à la ligne */
     scrollbar-width: thin;
 }
@@ -24,9 +23,9 @@ div.Scroll_Width_Div {
 div#Body_Recipes_Categories {
     height: 8vh;
 }
-Recette délicieuse mais nécessite beaucoup de temps !
+
 div.Recipe_Categorie {
-    width: 350px;
+    width: 330px;
     flex-shrink: 0; /* Empêche le redimensionnement */
     background-color: var(--Recipe_Categorie_Background_Color);
     display: flex;
@@ -40,3 +39,24 @@ div.Recipe_Categorie {
     div.Recipe_Categorie:hover {
         scale: 1.05;
     }
+
+
+@media (min-width: 769px)
+{
+    /* Scroller Recipes */
+    div.Scroll_Width_Div{
+        flex-wrap: wrap;
+    }
+
+    /* Recipe Categories */
+    div#Body_Recipes_Categories {
+        height: auto;
+    }
+}
+
+@media (max-width: 768px)
+{
+    div.Recipe_Categorie {
+        height: 8vh;
+    }
+}

@@ -44,10 +44,19 @@ namespace ProjectCookBook.Controllers
         {
             string query = "Select * from Utilisateurs where id = @id";
             Compte account;
-            using (var connexion = new NpgsqlConnection(_connexionString))
+
+            try
             {
-                account = connexion.QuerySingle<Compte>(query, new { id = id }); ;
+                using (var connexion = new NpgsqlConnection(_connexionString))
+                {
+                    account = connexion.QuerySingle<Compte>(query, new { id = id }); ;
+                }
             }
+            catch
+            {
+                return NotFound();
+            }
+
             return View(account);
         }
 

@@ -10,6 +10,7 @@
 </head>
 <body>
     <header>
+        <partial name="_CookieConsentPartial" />
 
         <div id="Header" class="Header">
 
@@ -30,9 +31,10 @@
 
                 <div class="menuBurger" id="menuBurger">
                     <a asp-controller="Home" asp-action="Index" class="elt">Accueil</a>
+                    <a asp-controller="Recettes" asp-action="Recettes" class="elt">Toutes les recettes</a>
                     <a asp-controller="Recettes" asp-action="Ajouter" class="elt">Crée ma recette</a>
                     <a asp-controller="Recettes" asp-action="MesRecettes" class="elt">Mes Recettes</a>
-                    <a href="/Main/Compte/Compte.html" class="elt">Compte</a>
+                    <a asp-controller="Comptes" asp-action="Compte" asp-route-id="@int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier))" class="elt">Compte</a>
                     <button onclick="changeTheme('Light')">Clair</button>
                     <button onclick="changeTheme('Dark')">Sombre</button>
                     <button onclick="changeTheme('Rubisnoir')">Custom</button>
@@ -63,18 +65,20 @@
                 </p>
             </div>
 
+            <hr>
+
             <nav class="Footer_Part" id="Footer_Nav">
                 <ul>
-                    <li>[1-]</li>
+                    <li><a asp-controller="Home" asp-action="Privacy" class="elt">Mentions Légales</a></li>
                     <li>[2-]</li>
                     <li>[3-]</li>
                 </ul>
             </nav>
 
-            <hr>
+
 
             <div class="Footer_Part" id="copyright">
-                <img src="~/Img/Icons/Copyright-Logo.png" alt="Logo Copyright" id="Logo_Copyright">All rights reserved,
+                <img src="/Img/Icons/Copyright-Logo.png" alt="Logo Copyright" id="Logo_Copyright">All rights reserved,
                 Gastronome Créatif.
             </div>
         </div>

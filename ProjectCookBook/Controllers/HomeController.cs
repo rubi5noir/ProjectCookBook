@@ -6,6 +6,7 @@ using Dapper;
 
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace ProjectCookBook.Controllers
 {
@@ -48,8 +49,10 @@ namespace ProjectCookBook.Controllers
                            "Where recettes.id_utilisateur = @createur " +
                            "order by id asc " +
                            "limit 25";
+
             List<Recette> mesrecettesgrouped;
             List<Recette> mesrecettes;
+            List<Categorie> categories = GetCategories();
             try
             {
                 using (var connexion = new NpgsqlConnection(_connexionString))
@@ -108,28 +111,23 @@ namespace ProjectCookBook.Controllers
             }).ToList();
 
             recetteHomeViewModel.recettes = recettesgrouped;
+            recetteHomeViewModel.categories = categories;
 
             return View(recetteHomeViewModel);
         }
 
-        public IActionResult GetCategories()
+        public List<Categorie> GetCategories()
         {
             string query = "Select * from Categories " +
                 "limit 15";
             List<Categorie> categories;
-            try
-            {
+
                 using (var connexion = new NpgsqlConnection(_connexionString))
                 {
                     categories = connexion.Query<Categorie>(query).ToList();
                 }
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
 
-            return PartialView("_CategorieVignette", categories);
+            return categories;
         }
 
         public IActionResult Privacy()
@@ -141,6 +139,17 @@ namespace ProjectCookBook.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [Route("/Home/ErrorHandler/{statusCode}")]
+        public IActionResult ErrorHandler(int statusCode)
+        {
+            return statusCode switch
+            {
+                403 => View("AccessDenied"),
+                404 => View("NotFound"),
+                _ => View("AutresErreurs")
+            };
         }
     }
 }
