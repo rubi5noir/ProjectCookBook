@@ -35,6 +35,27 @@ namespace ProjectCookBook.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
+        public IActionResult Comptes()
+        {
+            string query = "Select * from Utilisateurs";
+            List<Compte> comptes;
+
+            try
+            {
+                using (var connexion = new NpgsqlConnection(_connexionString))
+                {
+                    comptes = connexion.Query<Compte>(query).ToList();
+                }
+            }
+            catch
+            {
+                return NotFound();
+            }
+
+            return View(comptes);
+        }
+
         /// <summary>
         /// Retourne la View Compte avec les informations de l'utilisateur
         /// </summary>

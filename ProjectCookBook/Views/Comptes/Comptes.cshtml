@@ -1,0 +1,6 @@
+﻿@model List<Compte>
+
+@foreach (var compte in Model)
+{
+    @await Html.PartialAsync("_CompteVignette", compte)
+}

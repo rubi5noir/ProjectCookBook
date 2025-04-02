@@ -1,9 +1,9 @@
 ﻿<div class="body">
     <div class="Admin_Direction">
-        <button id="Bouton_Admin_Recettes">Recettes</button>
+        <button type="button" onclick="location.href='@Url.Action("Recettes", "Recettes")'">Recettes</button>
     </div>
     <div class="Admin_Direction">
-        <button id="Bouton_Admin_Utilisateurs">Utilisateurs</button>
+        <button type="button" onclick="location.href='@Url.Action("Comptes", "Comptes")'">Utilisateurs</button>
     </div>
     <div>
         <button type="button" onclick="location.href='@Url.Action("AjoutIngredient", "Recettes")'">Créer ingrédient</button>
