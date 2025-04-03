@@ -34,13 +34,13 @@ div.Recipe_Right_Part {
 
 /* Step List */
 ul {
-    padding-left: 20px; /* Espacement général pour la liste */
+    padding-left: 10px; /* Espacement général pour la liste */
     margin: 0;
 }
 
     ul li {
         position: relative; /* Nécessaire pour gérer la bordure et le pseudo-élément */
-        padding-left: 30px; /* Espace pour laisser place à la puce personnalisée */
+        padding-left: 10px; /* Espace pour laisser place à la puce personnalisée */
         border: 2px solid #000; /* Bordure autour de l'élément li, incluant la puce et le texte */
         margin-bottom: 10px; /* Espacement entre les éléments de la liste */
         display: flex;
@@ -54,6 +54,10 @@ ul {
             font-size: 18px;
             font-weight: bold;
         }
+
+div.Recipe_Step {
+    margin-right: 15px;
+}
 
 
 
@@ -88,6 +92,13 @@ h3.Rating {
     top: 0;
     position: relative;
 }
+
 h2.Rating, h3.Rating {
     display: inline-block;
+}
+
+@media (max-width: 426px) {
+    div.Rating {
+        width: 80vw;
+    }
 }

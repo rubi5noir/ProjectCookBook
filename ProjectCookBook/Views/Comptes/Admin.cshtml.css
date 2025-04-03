@@ -18,3 +18,10 @@ div.Admin_Direction {
     width: 300px;
     border: 3px black solid;
 }
+
+@media (max-width: 426px)
+{
+    div.body{
+        display:initial;
+    }
+}

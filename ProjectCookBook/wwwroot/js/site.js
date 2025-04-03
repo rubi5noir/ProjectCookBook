@@ -136,6 +136,15 @@ document.querySelectorAll(".Recipe_Book").forEach(div => {
     })
 });
 
+document.querySelectorAll(".Compte_Vignette").forEach(div => {
+    div.addEventListener("click", function () {
+        const url = this.getAttribute("data-url");
+        if (url) {
+            window.location.href = url;
+        }
+    })
+});
+
 function ClickOnCategorie(event) {
     let h2Element;
     if (event.target.tagName === "H2") {

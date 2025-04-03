@@ -1,6 +1,6 @@
 ﻿div#Theme {
     position: absolute;
-    top: 50vh;
+    top: initial;
 }
 
 div#Personnal_Information {
@@ -10,4 +10,10 @@ div#Personnal_Information {
     border: 3px black solid;
     border-top: 1px var(--Div_Background_Color) solid;
     background-color: var(--Div_Background_Color);
+}
+
+@media (max-width: 321px) {
+    div#Personnal_Information {
+        width: 65vw;
+    }
 }

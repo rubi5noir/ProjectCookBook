@@ -240,11 +240,11 @@
             <fieldset id="Photo_Fieldset">
 
                 <label asp-for="@Model.imgFile">Photo :</label>
-                <input asp-for="@Model.imgFile" id="Form_Image_File_User">
+                <input asp-for="@Model.imgFile">
                 @if (Model.img != null)
                 {
                     <div>
-                        <label>Image actuelle :</label>
+                        <h4>Image actuelle :</h4>
                         <img src="@Model.img" alt="Image de la recette" width="200" />
                     </div>
                 }

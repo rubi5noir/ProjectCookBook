@@ -33,6 +33,10 @@ h1 {
         border-top: none;
     }
 
+    h1#Label_Recipes {
+        border-top: none;
+    }
+
 /* Zone Vignette Recipe */
 div.Vignette_Recipes {
     display: flex;
@@ -143,6 +147,44 @@ div.Recipe_Categorie {
         font-size:larger;
     }
 
+
+    /* Editeur ( psk razor veut pas sinon :/ )*/
+#Cooking_Steps_Fieldset * textarea {
+    width: 300px;
+    height: 100px;
+}
+#Cooking_Steps_Fieldset * label {
+        position: relative;
+    bottom: 45px;
+}
+
+
+/* Comptes ( toujours pas :/ )*/
+div.Compte_Vignette {
+    margin: 5px;
+    border: solid;
+    width: 20%;
+}
+
+    div.Compte_Vignette > img {
+        width: 70%;
+    }
+
+/* Responsive */
+@media (max-width: 426px)
+{
+    #Cooking_Steps_Fieldset * label {
+        bottom: 0px;
+    }
+    #Cooking_Steps_Fieldset * textarea {
+        width: 200px;
+        height: 100px;
+    }
+
+    div.Compte_Vignette {
+        width: 50%;
+    }
+}
 
 /* Themes */
 

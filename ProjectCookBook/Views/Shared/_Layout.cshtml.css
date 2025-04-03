@@ -190,6 +190,10 @@ div#Complementary_Intel {
         font-size: medium;
     }
 
+hr {
+    margin: 5px;
+}
+
 div#copyright {
     width: 100vw;
     border-top: 2px solid grey;
@@ -225,10 +229,6 @@ img#Logo_Copyright {
     div#Complementary_Intel {
         height: auto;
         width: 55vw;
-    }
-
-    hr {
-        margin: 5px;
     }
 
     nav#Footer_Nav {

@@ -609,7 +609,13 @@ namespace ProjectCookBook.Controllers
                 ViewBag.select_ingredients = recetteFormViewModel.select_ingredients_list;
                 ViewBag.select_categories = recetteFormViewModel.select_categories_list;
 
-                recetteFormViewModel.createur_id = int.Parse(TempData["CreateurId"].ToString());
+                string querycreateur = "Select Utilisateurs.* " +
+                                   "From recettes " +
+                                   "inner join utilisateurs on recettes.id_utilisateur = utilisateurs.id " +
+                                   "where recettes.id=@id";
+
+                recette.Createur = connexion.QuerySingle<Compte>(querycreateur, new { id = id });
+                recetteFormViewModel.createur_id = recette.Createur.id;
 
                 recetteFormViewModel.InitialisationSelects();
 
