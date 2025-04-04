@@ -895,22 +895,6 @@ namespace ProjectCookBook.Controllers
         }
 
         /// <summary>
-        /// Retourne la View Search
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public IActionResult Search()
-        {
-            RecetteRechercheViewModel recetteRechercheViewModel = new RecetteRechercheViewModel();
-
-            recetteRechercheViewModel.ingredients = CreationSelectIngredient();
-            recetteRechercheViewModel.categories = CreationSelectCategorie();
-            recetteRechercheViewModel.recherche = "";
-
-            return View(recetteRechercheViewModel);
-        }
-
-        /// <summary>
         /// Passerelle depuis les vignettes categorie et la page de recherche
         /// </summary>
         /// <param name="Search_Recipe"></param>
@@ -926,7 +910,6 @@ namespace ProjectCookBook.Controllers
         /// </summary>
         /// <param name="Search_Recipe"></param>
         /// <returns></returns>
-        [HttpPost]
         public IActionResult Search(string Search_Recipe)
         {
             string queryrechercheutilisateur = "SELECT DISTINCT recettes.id " +
@@ -995,7 +978,7 @@ namespace ProjectCookBook.Controllers
             recetteRechercheViewModel.recettes = recettesgrouped;
             recetteRechercheViewModel.recherche = Search_Recipe;
 
-            return View("Search", recetteRechercheViewModel);
+            return Json(recetteRechercheViewModel);
         }
 
         /// <summary>

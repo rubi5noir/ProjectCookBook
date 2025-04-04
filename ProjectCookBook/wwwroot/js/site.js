@@ -157,3 +157,74 @@ function ClickOnCategorie(event) {
     localStorage.setItem('userResearch', "Recherche : " + User_Research);
     window.location.href = '/Main/Recipes/Recipe_Search.html';
 }
+
+
+
+
+
+
+
+
+
+
+
+/* fetch */
+
+let boutonSubmitInputRecherche = document.getElementById("Search_Recipe_Button");
+
+boutonSubmitInputRecherche.addEventListener('click', Recherche);
+
+
+function Recherche() {
+    // récupération de la valeur de la recherche
+    let inputRecherche = document.getElementById("Search_Recipe");
+    let chaine = inputRecherche.value;
+
+    // appel du serveur pour récupéré les livres correspondant à la recherche
+    fetch("/Recettes/Search?Search_Recipe=" + chaine).then((reponse) => {
+        return reponse.json();
+    }).then((json) => {
+        console.log(json);
+        for (let i = 0; i < json.recettes.length; i++) {
+            afficherRecette(json.recettes[i]);
+
+        }
+    })
+
+}
+
+let Body_Recipes = document.getElementById('Body_Recipes');
+
+function afficherRecette(recette) {
+
+    let Recipe_Book = document.createElement('div');
+    let div = document.createElement('div');
+    let h3_note = document.createElement('h3');
+    let h3_Star = document.createElement('h3');
+    let img = document.createElement('img');
+    let h2 = document.createElement('h2');
+
+    Recipe_Book.classList.add('Recipe_Book');
+    Recipe_Book.setAttribute("data-url", "@Url.Action('Detail', 'Recettes', new { id = Model.id })");
+
+    Recipe_Book.appendChild(div);
+
+    h3_Star.classList.add('Rating');
+
+    div.appendChild(h3_Star);
+
+    h3_note.classList.add('Rating_On_Vignette');
+    h3_note.innerText = recette.avisnote;
+
+    div.appendChild(h3_note);
+
+    img.src = recette.img;
+
+    div.appendChild(img);
+
+    h2.innerText = recette.nom;
+
+    div.appendChild(h2);
+
+    Body_Recipes.appendChild(Recipe_Book);
+}

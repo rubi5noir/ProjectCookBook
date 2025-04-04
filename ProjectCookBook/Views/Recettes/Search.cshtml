@@ -87,19 +87,5 @@
 </div>
 
 <div id="Body_Recipes" class="Vignette_Recipes">
-    @foreach (var recette in Model.recettes)
-    {
-        if (Model.note > 0 && recette.avis.Any())
-        {
-            if ((recette.avis.Any() ? Math.Floor(recette.avis.Average(a => a.note)) : 0) == Model.note - 1)
-            {
-                @await Html.PartialAsync("_RecipeBook", recette)
-            }
-        }
-        else
-        {
-            @await Html.PartialAsync("_RecipeBook", recette)
-        }
-
-    }
+    
 </div>
