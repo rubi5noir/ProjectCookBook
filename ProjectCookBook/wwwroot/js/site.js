@@ -72,55 +72,7 @@ function CompteRedirect() {
 }
 
 
-/* Recherche */
 
-
-document.addEventListener("headerLoaded", () => {
-    initScriptsfilter();
-});
-
-
-function initScriptsfilter() {
-    // Sélection des éléments
-    boutonFilter = document.getElementById('boutonFilter');
-    menuFilter = document.getElementById('menuFilter');
-    span4 = document.getElementById('span4');
-    span5 = document.getElementById('span5');
-    span6 = document.getElementById('span6');
-    span7 = document.getElementById('span7');
-    filter = document.querySelectorAll('.filter');
-
-    // Vérifier immédiatement
-    let missingElements = [];
-    if (!boutonFilter) missingElements.push("boutonFilter");
-    if (!menuFilter) missingElements.push("menuFilter");
-    if (!span4) missingElements.push("span4");
-    if (!span5) missingElements.push("span5");
-    if (!span6) missingElements.push("span6");
-    if (!span7) missingElements.push("span7");
-
-    if (missingElements.length > 0) {
-        console.warn(`Certains éléments ne sont pas encore prêts: ${missingElements.join(", ")}`);
-
-        // Retenter après 100ms
-        setTimeout(initScripts, 100);
-        return;
-    }
-
-    // Ajout des événements
-    boutonFilter.addEventListener('click', toggleMenuFilter);
-    filter.forEach(filter => filter.addEventListener('click', toggleMenuFilter));
-}
-
-
-// Fonction pour ouvrir/fermer le menu burger
-function toggleMenuFilter() {
-    menuFilter.classList.toggle('menuFilterOpen');
-    span4.classList.toggle('span4Open');
-    span5.classList.toggle('span5Open');
-    span6.classList.toggle('span6Open');
-    span7.classList.toggle('span7Open');
-}
 
 function changeTheme(theme) {
     document.body.className = theme; // Change la classe du body
@@ -156,4 +108,99 @@ function ClickOnCategorie(event) {
     let User_Research = h2Element.innerText;
     localStorage.setItem('userResearch', "Recherche : " + User_Research);
     window.location.href = '/Main/Recipes/Recipe_Search.html';
+}
+
+
+
+
+
+
+
+
+
+
+
+/* fetch */
+
+let boutonSubmitInputRecherche = document.getElementById("Search_Recipe_Button");
+
+boutonSubmitInputRecherche.addEventListener('click', Recherche);
+
+let Body_Recipes = document.getElementById('Body_Recipes');
+
+function Recherche(param) {
+    // récupération de la valeur de la recherche
+    let inputRecherche = document.getElementById("Search_Recipe");
+    let chaine = inputRecherche.value;
+    let hiddenInputRecherche = document.getElementById("recherche");
+
+    // Cas 1 : appelé par un clic → param est un MouseEvent
+    // Cas 2 : appelé avec une string (via script) → param est la chaîne recherchée
+    if (param instanceof Event) {
+        chaine = inputRecherche.value;
+    } else {
+        chaine = param || "";
+        if (inputRecherche) inputRecherche.value = chaine;
+    }
+
+    if (!chaine && hiddenInputRecherche) {
+        chaine = hiddenInputRecherche.value;
+    }
+
+    if (hiddenInputRecherche) hiddenInputRecherche.value = chaine;
+
+    if (window.location.pathname !== "/Recettes/PageSearch") {
+        window.location.href = "/Recettes/PageSearch?Search_Recipe=" + encodeURIComponent(chaine);
+        return;
+    }
+
+    Body_Recipes = document.getElementById('Body_Recipes');
+    fetch("/Recettes/Search?Search_Recipe=" + encodeURIComponent(chaine)).then((reponse) => {
+        return reponse.json();
+    }).then((json) => {
+        console.log(json);
+        Body_Recipes.innerHTML = ''; // Vide le contenu précédent
+        for (let i = 0; i < json.recettes.length; i++) {
+            afficherRecette(json.recettes[i]);
+        }
+    });
+}
+
+
+
+function afficherRecette(recette) {
+
+    let Recipe_Book = document.createElement('div');
+    let div = document.createElement('div');
+    let h3_note = document.createElement('h3');
+    let h3_Star = document.createElement('h3');
+    let img = document.createElement('img');
+    let h2 = document.createElement('h2');
+
+    Recipe_Book.classList.add('Recipe_Book');
+    Recipe_Book.setAttribute("data-url", `/Recettes/Detail/${recette.id}`);
+    Recipe_Book.addEventListener('click', () => {
+        window.location.href = `/Recettes/Detail/${recette.id}`;
+    });
+
+    Recipe_Book.appendChild(div);
+
+    h3_Star.classList.add('Rating');
+
+    div.appendChild(h3_Star);
+
+    h3_note.classList.add('Rating_On_Vignette');
+    h3_note.innerText = recette.avisnote;
+
+    div.appendChild(h3_note);
+
+    img.src = recette.img;
+
+    div.appendChild(img);
+
+    h2.innerText = recette.nom;
+
+    div.appendChild(h2);
+
+    Body_Recipes.appendChild(Recipe_Book);
 }
