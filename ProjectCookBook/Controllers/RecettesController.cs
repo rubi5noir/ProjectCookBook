@@ -894,12 +894,20 @@ namespace ProjectCookBook.Controllers
             }
         }
 
+        public IActionResult PageSearch()
+        {
+            RecetteRechercheViewModel recetteRechercheViewModel = new RecetteRechercheViewModel();
+            recetteRechercheViewModel.ingredients = CreationSelectIngredient();
+            recetteRechercheViewModel.categories = CreationSelectCategorie();
+            
+            return View("Search", recetteRechercheViewModel);
+        }
+
         /// <summary>
         /// Passerelle depuis les vignettes categorie et la page de recherche
         /// </summary>
         /// <param name="Search_Recipe"></param>
         /// <returns></returns>
-        [HttpGet]
         public IActionResult SearchOnClick(string Search_Recipe = "")
         {
             return Search(Search_Recipe); // Réutilise la logique du POST
