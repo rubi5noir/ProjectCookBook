@@ -128,18 +128,44 @@ boutonSubmitInputRecherche.addEventListener('click', Recherche);
 
 let Body_Recipes = document.getElementById('Body_Recipes');
 
+document.querySelectorAll(".Recipe_Categorie").forEach(div => {
+    div.addEventListener("click", function () {
+        let url = this.getAttribute("data-nom");
+        if (window.location.pathname !== "/Recettes/PageSearch") {
+            sessionStorage.setItem("categorieRecherche", url);
+            window.location.href = "/Recettes/PageSearch";
+            return;
+        }
+        RechercheParCategorie(url);
+    })
+});
+
+function RechercheParCategorie(param) {
+    Body_Recipes = document.getElementById('Body_Recipes');
+    Label_Recipes_Search = document.getElementById('Label_Recipes_Search').innerHTML = param;
+    fetch("/Recettes/SearchByCategorie?Search_Recipe=" + encodeURIComponent(param)).then((reponse) => {
+        return reponse.json();
+    }).then((json) => {
+        console.log(json);
+        Body_Recipes.innerHTML = ''; // Vide le contenu précédent
+        for (let i = 0; i < json.recettes.length; i++) {
+            afficherRecette(json.recettes[i]);
+        }
+    });
+}
+
 function Recherche(param) {
     // récupération de la valeur de la recherche
     let inputRecherche = document.getElementById("Search_Recipe");
-    let chaine = inputRecherche.value;
+    let chaine = inputRecherche.value || " ";
     let hiddenInputRecherche = document.getElementById("recherche");
 
     // Cas 1 : appelé par un clic → param est un MouseEvent
     // Cas 2 : appelé avec une string (via script) → param est la chaîne recherchée
     if (param instanceof Event) {
-        chaine = inputRecherche.value;
+        chaine = inputRecherche.value || " ";
     } else {
-        chaine = param || "";
+        chaine = param || " ";
         if (inputRecherche) inputRecherche.value = chaine;
     }
 
@@ -155,6 +181,7 @@ function Recherche(param) {
     }
 
     Body_Recipes = document.getElementById('Body_Recipes');
+    Label_Recipes_Search = document.getElementById('Label_Recipes_Search').innerHTML = chaine;
     fetch("/Recettes/Search?Search_Recipe=" + encodeURIComponent(chaine)).then((reponse) => {
         return reponse.json();
     }).then((json) => {

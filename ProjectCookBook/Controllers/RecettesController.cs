@@ -217,7 +217,7 @@ namespace ProjectCookBook.Controllers
         /// <returns></returns>
         private List<Ingredient> CreationSelectIngredient()
         {
-            string queryIngredients = "Select * from Ingredients order by nom asc";
+            string queryIngredients = "Select * from Ingredients order by id asc";
             List<Ingredient> Ingredients;
             using (var connexion = new NpgsqlConnection(_connexionString))
             {
@@ -232,7 +232,7 @@ namespace ProjectCookBook.Controllers
         /// <returns></returns>
         private List<Categorie> CreationSelectCategorie()
         {
-            string queryCategories = "Select * from Categories order by nom asc";
+            string queryCategories = "Select * from Categories order by id asc";
             List<Categorie> Categories;
             using (var connexion = new NpgsqlConnection(_connexionString))
             {
@@ -908,9 +908,69 @@ namespace ProjectCookBook.Controllers
         /// </summary>
         /// <param name="Search_Recipe"></param>
         /// <returns></returns>
-        public IActionResult SearchOnClick(string Search_Recipe = "")
+        public IActionResult SearchByCategorie(string Search_Recipe)
         {
-            return Search(Search_Recipe); // Réutilise la logique du POST
+            string queryrechercheutilisateur = "SELECT DISTINCT recettes.id " +
+                "FROM RECETTES " +
+                "INNER JOIN CATEGORIES_RECETTES ON CATEGORIES_RECETTES.ID_RECETTE = recettes.ID " +
+                "INNER JOIN CATEGORIES ON categories.id = CATEGORIES_RECETTES.ID_CATEGORIE " +
+                "WHERE CATEGORIES.NOM LIKE @recherche";
+
+            string queryrecettes = "Select * from Recettes " +
+                           "LEFT join avis on avis.id_recette = recettes.id " +
+                           "where recettes.id = ANY(@ids) " +
+                           "order by id asc";
+
+            List<int> recettes_ids = new List<int>();
+            List<Recette> recettesgrouped;
+            List<Recette> recettes;
+
+            using (var connexion = new NpgsqlConnection(_connexionString))
+            {
+                try
+                {
+                    recettes_ids = connexion.Query<int>(queryrechercheutilisateur, new { recherche = "%" + Search_Recipe + "%" }).ToList();
+
+                    List<object> parametersRecettes = new List<object>();
+                    foreach (var id in recettes_ids)
+                    {
+                        parametersRecettes.Add(
+                            new
+                            {
+                                id = id
+                            });
+                    }
+
+                    recettes = connexion.Query<Recette, Avis, Recette>(queryrecettes, (recette, avis) =>
+                    {
+                        recette.avis.Add(avis);
+                        return recette;
+                    },
+                    new { ids = recettes_ids.ToArray() },
+                    splitOn: "id, id_recette").ToList();
+                }
+                catch (Exception)
+                {
+                    return NotFound();
+                }
+            }
+
+            recettesgrouped = recettes.GroupBy(R => R.id).Select(g =>
+            {
+                Recette groupedRecette = g.First();
+
+                groupedRecette.avis = g.SelectMany(R => R.avis).ToList();
+
+                return groupedRecette;
+            }).ToList();
+
+            RecetteRechercheViewModel recetteRechercheViewModel = new RecetteRechercheViewModel();
+            recetteRechercheViewModel.ingredients = CreationSelectIngredient();
+            recetteRechercheViewModel.categories = CreationSelectCategorie();
+            recetteRechercheViewModel.recettes = recettesgrouped;
+            recetteRechercheViewModel.recherche = Search_Recipe;
+
+            return Json(recetteRechercheViewModel);
         }
 
         /// <summary>

@@ -7,6 +7,15 @@
     }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const catParam = sessionStorage.getItem("categorieRecherche");
+    if (catParam) {
+        sessionStorage.removeItem("categorieRecherche");
+        RechercheParCategorie(catParam);
+    }
+});
+
+
 /* Recherche */
 
 

@@ -1,6 +1,6 @@
 ﻿@model Categorie
 
-    <div class="Recipe_Categorie" data-url="@Url.Action("SearchOnClick", "Recettes", new { Search_Recipe = Model.nom })">
+<div class="Recipe_Categorie" data-nom="@Model.nom">
         <h2>@Model.nom</h2>
     </div>
 
