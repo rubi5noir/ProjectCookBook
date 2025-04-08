@@ -33,7 +33,8 @@ namespace ProjectCookBook.Models
 
         /* Nouvel avis */
         public string aviscommentaire { get; set; }
-        public int avisnote { get; set; }
+        public double avisnote { get; set; }
+
         public List<SelectListItem> noteselectlist = new List<SelectListItem> {
             new SelectListItem { Value = "0", Text = "0" },
             new SelectListItem { Value = "1", Text = "1" },

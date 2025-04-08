@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Data.Common;
 using System.Data;
 using NpgsqlTypes;
+using System.Reflection;
 
 namespace ProjectCookBook.Controllers
 {
@@ -57,7 +58,16 @@ namespace ProjectCookBook.Controllers
                 },
                 splitOn: "id, id_recette").ToList();
             }
-            return View(recettes);
+
+            List<Recette> recettesgrouped;
+            recettesgrouped = recettes.GroupBy(R => R.id).Select(g =>
+            {
+                Recette groupedRecette = g.First();
+                groupedRecette.avis = g.SelectMany(R => R.avis).ToList();
+                return groupedRecette;
+            }).ToList();
+
+            return View(recettesgrouped);
         }
 
         /// <summary>
@@ -1045,6 +1055,14 @@ namespace ProjectCookBook.Controllers
             recetteRechercheViewModel.categories = CreationSelectCategorie();
             recetteRechercheViewModel.recettes = recettesgrouped;
             recetteRechercheViewModel.recherche = Search_Recipe;
+
+            foreach(var recette in recetteRechercheViewModel.recettes)
+            {
+                if (recette.avis != null && recette.avis.Any())
+                    recette.avisnote = Math.Round(recette.avis.Average(a => a.note), 1);
+                else
+                    recette.avisnote = 0;
+            }
 
             return Json(recetteRechercheViewModel);
         }

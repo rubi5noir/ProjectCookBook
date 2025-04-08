@@ -4,19 +4,15 @@
 
     <div id="Personnal_Information">
         <ul>
-            <li>@Model.identifiant</li>
-            <li>@Model.nom</li>
-            <li>@Model.prenom</li>
-            <li>@Model.email</li>
-            <li>@Model.Role</li>
+            <li id="identifiant">@Model.identifiant</li>
+            <li id="nom">@Model.nom</li>
+            <li id="prenom">@Model.prenom</li>
+            <li id="email">@Model.email</li>
+            <li id="role">@Model.Role</li>
         </ul>
     </div>
 
-    <div id="Theme">
-        <button onclick="changeTheme('Light')">Clair</button>
-        <button onclick="changeTheme('Dark')">Sombre</button>
-        <button onclick="changeTheme('Rubisnoir')">Custom</button>
-
+    <div>
         <button type="button" onclick="window.location.href='@Url.Action("Admin", "Comptes")'">Admin</button>
         @if (User.Identity.IsAuthenticated)
         {

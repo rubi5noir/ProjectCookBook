@@ -12,6 +12,42 @@ div#Personnal_Information {
     background-color: var(--Div_Background_Color);
 }
 
+ul li {
+    list-style: none;
+    padding-left: 0;
+}
+
+    ul li#identifiant::before {
+        content: "Pseudo : ";
+        font-weight: bold;
+        color: #333;
+    }
+
+    ul li#nom::before {
+        content: "Nom : ";
+        font-weight: bold;
+        color: #333;
+    }
+
+    ul li#prenom::before {
+        content: "Prénom : ";
+        font-weight: bold;
+        color: #333;
+    }
+
+    ul li#email::before {
+        content: "Email : ";
+        font-weight: bold;
+        color: #333;
+    }
+
+    ul li#role::before {
+        content: "Role : ";
+        font-weight: bold;
+        color: #333;
+    }
+
+
 @media (max-width: 321px) {
     div#Personnal_Information {
         width: 65vw;

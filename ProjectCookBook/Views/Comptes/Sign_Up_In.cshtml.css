@@ -40,3 +40,8 @@ ul {
             font-size: 18px;
             font-weight: bold;
         }
+
+
+.Connexion input:after {
+    content: "*";
+}
