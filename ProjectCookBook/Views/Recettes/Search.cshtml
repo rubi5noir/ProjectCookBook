@@ -1,10 +1,13 @@
 ﻿@model RecetteRechercheViewModel
 @section Scripts {
-<partial name="_ValidationScriptsPartial" />
-<script src="~/js/Recettes_Search.js" defer></script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/Recettes_Search.js" defer></script>
 }
 
+
 <h1 for="Body_Recipes" class="Label_Zones_Search" id="Label_Recipes_Search">@Model.recherche</h1>
+
+
 
 <div class="boutonFilter" id="boutonFilter">
     <span class="span4" id="span4"></span>
@@ -28,9 +31,9 @@
                 {
                     <div class="menuFilter_Checkbox">
                         <input type="checkbox"
-                        name="FilterIngredients"
-                        value="@Model.ingredients[i].id"
-                        id="ingredient_@Model.ingredients[i].id" checked="checked" />
+                               name="FilterIngredients"
+                               value="@Model.ingredients[i].id"
+                               id="ingredient_@Model.ingredients[i].id" checked="checked" />
                         <label for="ingredient_@Model.ingredients[i].id">@Model.ingredients[i].nom</label>
                     </div>
                 }
@@ -38,9 +41,9 @@
                 {
                     <div class="menuFilter_Checkbox">
                         <input type="checkbox"
-                        name="FilterIngredients"
-                        value="@Model.ingredients[i].id"
-                        id="ingredient_@Model.ingredients[i].id" />
+                               name="FilterIngredients"
+                               value="@Model.ingredients[i].id"
+                               id="ingredient_@Model.ingredients[i].id" />
                         <label for="ingredient_@Model.ingredients[i].id">@Model.ingredients[i].nom</label>
                     </div>
                 }
@@ -58,9 +61,9 @@
                 {
                     <div class="menuFilter_Checkbox">
                         <input type="checkbox"
-                        name="FilterCategorie"
-                        value="@Model.categories[i].id"
-                        id="categorie_@Model.categories[i].id" checked="checked" />
+                               name="FilterCategorie"
+                               value="@Model.categories[i].id"
+                               id="categorie_@Model.categories[i].id" checked="checked" />
                         <label for="categorie_@Model.categories[i].id">@Model.categories[i].nom</label>
                     </div>
                 }
@@ -68,9 +71,9 @@
                 {
                     <div class="menuFilter_Checkbox">
                         <input type="checkbox"
-                        name="FilterCategorie"
-                        value="@Model.categories[i].id"
-                        id="categorie_@Model.categories[i].id" />
+                               name="FilterCategorie"
+                               value="@Model.categories[i].id"
+                               id="categorie_@Model.categories[i].id" />
                         <label for="categorie_@Model.categories[i].id">@Model.categories[i].nom</label>
                     </div>
                 }
@@ -87,11 +90,11 @@
                     <option value="DESC">Décroissant</option>
                 </optgroup>
                 <optgroup label="Temps de Préparation">
-                <option value="PrepASC">Croissant</option>
+                    <option value="PrepASC">Croissant</option>
                     <option value="PrepDESC">Décroissant</option>
                 </optgroup>
                 <optgroup label="Temps de Cuisson">
-                <option value="CuitASC">Croissant</option>
+                    <option value="CuitASC">Croissant</option>
                     <option value="CuitDESC">Décroissant</option>
                 </optgroup>
             </select>

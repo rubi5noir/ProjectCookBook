@@ -144,7 +144,8 @@ namespace ProjectCookBook.Controllers
         public IActionResult Recettes()
         {
             string query = "Select * from Recettes " +
-                           "left join Avis on Avis.id_recette = Recettes.id";
+                           "left join Avis on Avis.id_recette = Recettes.id " +
+                           "order by nom ASC";
             List<Recette> recettes;
             using (var connexion = new NpgsqlConnection(_connexionString))
             {
@@ -950,7 +951,7 @@ namespace ProjectCookBook.Controllers
             string queryrecettes = "Select * from Recettes " +
                            "LEFT join avis on avis.id_recette = recettes.id " +
                            "where recettes.id = ANY(@ids) " +
-                           "order by id asc";
+                           "order by nom asc";
 
             List<int> recettes_ids = new List<int>();
             List<Recette> recettes;
@@ -1218,7 +1219,7 @@ namespace ProjectCookBook.Controllers
             string query = "Select * from Recettes " +
                            "left join avis on avis.id_recette = recettes.id " +
                            "Where recettes.id_utilisateur = @createur " +
-                           "order by id asc";
+                           "order by nom asc";
             List<Recette> recettesgrouped;
             List<Recette> recettes;
             try

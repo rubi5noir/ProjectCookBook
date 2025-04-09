@@ -83,6 +83,7 @@
     </div>
 
     <div id="Rating" class="Recipe_Left_Part">
+        <h2>Ajouter un Avis</h2>
         <form asp-controller="Recettes" asp-action="AjouterAvis" method="post">
             <select asp-for="avisnote">
                 @foreach (var note in Model.noteselectlist)

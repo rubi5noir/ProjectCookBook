@@ -181,7 +181,15 @@ function Recherche(param) {
     }
 
     Body_Recipes = document.getElementById('Body_Recipes');
-    Label_Recipes_Search = document.getElementById('Label_Recipes_Search').innerHTML = chaine;
+    Label_Recipes_Search = document.getElementById('Label_Recipes_Search')
+    if (chaine == " ") {
+        Label_Recipes_Search.innerHTML = "Recettes";
+    }
+    else {
+        Label_Recipes_Search.innerHTML = chaine;
+    }
+
+
     fetch("/Recettes/Search?Search_Recipe=" + encodeURIComponent(chaine)).then((reponse) => {
         return reponse.json();
     }).then((json) => {
