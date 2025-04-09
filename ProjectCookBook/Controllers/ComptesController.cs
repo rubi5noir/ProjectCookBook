@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using ProjectCookBook.Models;
 using BC = BCrypt.Net.BCrypt;
-
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;

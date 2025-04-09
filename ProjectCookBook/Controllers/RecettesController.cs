@@ -539,8 +539,6 @@ namespace ProjectCookBook.Controllers
             return View("Editeur", recetteacreer);
         }
 
-
-
         /// <summary>
         /// Retourne la View Editeur pour modifier une recette
         /// </summary>
@@ -955,7 +953,6 @@ namespace ProjectCookBook.Controllers
                            "order by id asc";
 
             List<int> recettes_ids = new List<int>();
-            List<Recette> recettesgrouped;
             List<Recette> recettes;
 
             using (var connexion = new NpgsqlConnection(_connexionString))
@@ -988,12 +985,10 @@ namespace ProjectCookBook.Controllers
                 }
             }
 
-            recettesgrouped = GroupingRecettesByIdForAvis(recettes);
-
             RecetteRechercheViewModel recetteRechercheViewModel = new RecetteRechercheViewModel();
             recetteRechercheViewModel.ingredients = CreationSelectIngredient();
             recetteRechercheViewModel.categories = CreationSelectCategorie();
-            recetteRechercheViewModel.recettes = recettesgrouped;
+            recetteRechercheViewModel.recettes = GroupingRecettesByIdForAvis(recettes);
             recetteRechercheViewModel.recherche = Search_Recipe;
 
             foreach (var recette in recetteRechercheViewModel.recettes)
@@ -1032,7 +1027,6 @@ namespace ProjectCookBook.Controllers
                            "order by id asc";
 
             List<int> recettes_ids = new List<int>();
-            List<Recette> recettesgrouped;
             List<Recette> recettes;
 
             using (var connexion = new NpgsqlConnection(_connexionString))
@@ -1065,12 +1059,10 @@ namespace ProjectCookBook.Controllers
                 }
             }
 
-            recettesgrouped = GroupingRecettesByIdForAvis(recettes);
-
             RecetteRechercheViewModel recetteRechercheViewModel = new RecetteRechercheViewModel();
             recetteRechercheViewModel.ingredients = CreationSelectIngredient();
             recetteRechercheViewModel.categories = CreationSelectCategorie();
-            recetteRechercheViewModel.recettes = recettesgrouped;
+            recetteRechercheViewModel.recettes = GroupingRecettesByIdForAvis(recettes);
             recetteRechercheViewModel.recherche = Search_Recipe;
 
             foreach (var recette in recetteRechercheViewModel.recettes)
@@ -1140,7 +1132,6 @@ namespace ProjectCookBook.Controllers
                        "order by id asc";
 
             List<int> recettes_ids = new List<int>();
-            List<Recette> recettesgrouped;
             List<Recette> recettes;
 
             using (var connexion = new NpgsqlConnection(_connexionString))
@@ -1187,11 +1178,9 @@ namespace ProjectCookBook.Controllers
                 }
             }
 
-            recettesgrouped = GroupingRecettesByIdForAvis(recettes);
-
             recetteRechercheViewModel.ingredients = CreationSelectIngredient();
             recetteRechercheViewModel.categories = CreationSelectCategorie();
-            recetteRechercheViewModel.recettes = recettesgrouped;
+            recetteRechercheViewModel.recettes = GroupingRecettesByIdForAvis(recettes);
 
             return View("Search", recetteRechercheViewModel);
         }
@@ -1210,7 +1199,16 @@ namespace ProjectCookBook.Controllers
             List<Recette> recettes;
             try
             {
-                t
+                using (var connexion = new NpgsqlConnection(_connexionString))
+                {
+                    recettes = connexion.Query<Recette, Avis, Recette>(query, (recette, avis) =>
+                    {
+                        recette.avis.Add(avis);
+                        return recette;
+                    },
+                    new { createur = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)) },
+                    splitOn: "id, id_recette").ToList();
+                }
             }
             catch (Exception)
             {
