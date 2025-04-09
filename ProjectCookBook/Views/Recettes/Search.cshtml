@@ -78,6 +78,25 @@
             }
 
         </fieldset>
+
+        <fieldset>
+            <h2>Trier Par</h2>
+            <select asp-for="TempsOrder">
+                <optgroup label="Nom">
+                    <option value="ASC">Croissant</option>
+                    <option value="DESC">Décroissant</option>
+                </optgroup>
+                <optgroup label="Temps de Préparation">
+                <option value="PrepASC">Croissant</option>
+                    <option value="PrepDESC">Décroissant</option>
+                </optgroup>
+                <optgroup label="Temps de Cuisson">
+                <option value="CuitASC">Croissant</option>
+                    <option value="CuitDESC">Décroissant</option>
+                </optgroup>
+            </select>
+        </fieldset>
+
         <fieldset>
             <div class="menuFilter_Checkbox">
                 <select asp-for="note" asp-items="@Model.noteselectlist">

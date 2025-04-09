@@ -8,6 +8,8 @@ namespace ProjectCookBook.Models
 
         public string recherche { get; set; }
 
+        public string TempsOrder { get; set; } = "ASC";
+
 
         public List<Ingredient> ingredients { get; set; } = new List<Ingredient>();
         public List<int> FilterIngredients { get; set; } = new List<int>();

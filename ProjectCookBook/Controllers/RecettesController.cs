@@ -1024,7 +1024,7 @@ namespace ProjectCookBook.Controllers
             string queryrecettes = "Select * from Recettes " +
                            "LEFT join avis on avis.id_recette = recettes.id " +
                            "where recettes.id = ANY(@ids) " +
-                           "order by id asc";
+                           "order by nom asc";
 
             List<int> recettes_ids = new List<int>();
             List<Recette> recettes;
@@ -1128,8 +1128,32 @@ namespace ProjectCookBook.Controllers
 
             string queryrecettes = "Select * from Recettes " +
                        "LEFT join avis on avis.id_recette = recettes.id " +
-                       "where recettes.id = ANY(@ids) " +
-                       "order by id asc";
+                       "where recettes.id = ANY(@ids)";
+
+            if (recetteRechercheViewModel.TempsOrder == "PrepDESC")
+            {
+                queryrecettes += " Order by recettes.temps_preparation DESC";
+            }
+            else if (recetteRechercheViewModel.TempsOrder == "PrepASC")
+            {
+                queryrecettes += " Order by recettes.temps_preparation ASC";
+            }
+            else if (recetteRechercheViewModel.TempsOrder == "CuitDESC")
+            {
+                queryrecettes += " Order by recettes.temps_cuisson DESC";
+            }
+            else if (recetteRechercheViewModel.TempsOrder == "CuitASC")
+            {
+                queryrecettes += " Order by recettes.temps_cuisson ASC";
+            }
+            else if (recetteRechercheViewModel.TempsOrder == "DESC")
+            {
+                queryrecettes += " Order by recettes.nom DESC";
+            }
+            else
+            {
+                queryrecettes += " Order by recettes.nom ASC";
+            }
 
             List<int> recettes_ids = new List<int>();
             List<Recette> recettes;
