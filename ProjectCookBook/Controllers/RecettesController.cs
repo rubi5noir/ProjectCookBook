@@ -40,6 +40,103 @@ namespace ProjectCookBook.Controllers
             /* Transfert des validate message */
         }
 
+
+        // Méthodes
+
+        // Création de Select
+
+        /// <summary>
+        /// Crée une liste d'ingrédients
+        /// </summary>
+        /// <returns></returns>
+        private List<Ingredient> CreationSelectIngredient()
+        {
+            string queryIngredients = "Select * from Ingredients order by id asc";
+            List<Ingredient> Ingredients;
+            using (var connexion = new NpgsqlConnection(_connexionString))
+            {
+                Ingredients = connexion.Query<Ingredient>(queryIngredients).ToList();
+            }
+            return Ingredients;
+        }
+
+        /// <summary>
+        /// Crée une liste de catégories
+        /// </summary>
+        /// <returns></returns>
+        private List<Categorie> CreationSelectCategorie()
+        {
+            string queryCategories = "Select * from Categories order by id asc";
+            List<Categorie> Categories;
+            using (var connexion = new NpgsqlConnection(_connexionString))
+            {
+                Categories = connexion.Query<Categorie>(queryCategories).ToList();
+            }
+            return Categories;
+        }
+
+        // Grouping
+
+        private List<Recette> GroupingRecettesByIdForAvis(List<Recette> recettes)
+        {
+            List<Recette> recettesgrouped;
+
+            recettesgrouped = recettes.GroupBy(R => R.id).Select(g =>
+            {
+                Recette groupedRecette = g.First();
+                groupedRecette.avis = g.SelectMany(R => R.avis).ToList();
+                return groupedRecette;
+            }).ToList();
+
+            return recettesgrouped;
+        }
+
+        private Recette GroupingRecettesByIdForCategoriesAndEtapesAndIngredients(List<Recette> recettes)
+        {
+            Recette recette;
+
+            recette = recettes.GroupBy(R => R.id).Select(g =>
+                            {
+                                Recette groupedRecette = g.First();
+                                groupedRecette.categories = g.Select(R => R.categories.Single()).ToList();
+                                groupedRecette.etapes = g.Select(R => R.etapes.Single()).ToList();
+                                groupedRecette.ingredients = g.Select(R => R.ingredients.Single()).ToDictionary();
+                                return groupedRecette;
+                            }).First();
+
+            return recette;
+        }
+
+        private void GoupingIngredients(Recette recette)
+        {
+            recette.ingredients = recette.ingredients.GroupBy(ing => ing.Key.id).Select(g =>
+                   {
+                       KeyValuePair<Ingredient, string> groupedIngredient = g.First();
+                       return groupedIngredient;
+                   }).ToDictionary();
+        }
+
+        private void GroupingEtapes(Recette recette)
+        {
+            recette.etapes = recette.etapes.GroupBy(E => E.numero).Select(g =>
+                            {
+                                Etape groupedEtapes = g.First();
+                                return groupedEtapes;
+                            }).ToList();
+        }
+
+        private void GroupingCategories(Recette recette)
+        {
+            recette.categories = recette.categories.GroupBy(C => C.id).Select(g =>
+                            {
+                                Categorie groupedCategories = g.First();
+                                return groupedCategories;
+                            }).ToList();
+        }
+
+
+        // IActionResult
+
         /// <summary>
         /// Retourne la View Recettes avec la liste de toutes les recettes
         /// </summary>
@@ -59,13 +156,7 @@ namespace ProjectCookBook.Controllers
                 splitOn: "id, id_recette").ToList();
             }
 
-            List<Recette> recettesgrouped;
-            recettesgrouped = recettes.GroupBy(R => R.id).Select(g =>
-            {
-                Recette groupedRecette = g.First();
-                groupedRecette.avis = g.SelectMany(R => R.avis).ToList();
-                return groupedRecette;
-            }).ToList();
+            List<Recette> recettesgrouped = GroupingRecettesByIdForAvis(recettes);
 
             return View(recettesgrouped);
         }
@@ -124,20 +215,9 @@ namespace ProjectCookBook.Controllers
                 {
                     return NotFound();
                 }
-                recette = recettes.GroupBy(R => R.id).Select(g =>
-                {
-                    Recette groupedRecette = g.First();
-                    groupedRecette.categories = g.Select(R => R.categories.Single()).ToList();
-                    groupedRecette.etapes = g.Select(R => R.etapes.Single()).ToList();
-                    groupedRecette.ingredients = g.Select(R => R.ingredients.Single()).ToDictionary();
-                    return groupedRecette;
-                }).First();
+                recette = GroupingRecettesByIdForCategoriesAndEtapesAndIngredients(recettes);
 
-                recette.ingredients = recette.ingredients.GroupBy(ing => ing.Key.id).Select(g =>
-                {
-                    KeyValuePair<Ingredient, string> groupedIngredient = g.First();
-                    return groupedIngredient;
-                }).ToDictionary();
+                GoupingIngredients(recette);
 
                 List<Avis> avis;
                 try
@@ -156,17 +236,9 @@ namespace ProjectCookBook.Controllers
                     avis = null;
                 }
 
-                recette.etapes = recette.etapes.GroupBy(E => E.numero).Select(g =>
-                {
-                    Etape groupedEtapes = g.First();
-                    return groupedEtapes;
-                }).ToList();
+                GroupingEtapes(recette);
 
-                recette.categories = recette.categories.GroupBy(C => C.id).Select(g =>
-                {
-                    Categorie groupedCategories = g.First();
-                    return groupedCategories;
-                }).ToList();
+                GroupingCategories(recette);
 
                 recette.avis = avis;
 
@@ -219,36 +291,6 @@ namespace ProjectCookBook.Controllers
 
             }
             return RedirectToAction("Detail", new { id = recette.id });
-        }
-
-        /// <summary>
-        /// Crée une liste d'ingrédients
-        /// </summary>
-        /// <returns></returns>
-        private List<Ingredient> CreationSelectIngredient()
-        {
-            string queryIngredients = "Select * from Ingredients order by id asc";
-            List<Ingredient> Ingredients;
-            using (var connexion = new NpgsqlConnection(_connexionString))
-            {
-                Ingredients = connexion.Query<Ingredient>(queryIngredients).ToList();
-            }
-            return Ingredients;
-        }
-
-        /// <summary>
-        /// Crée une liste de catégories
-        /// </summary>
-        /// <returns></returns>
-        private List<Categorie> CreationSelectCategorie()
-        {
-            string queryCategories = "Select * from Categories order by id asc";
-            List<Categorie> Categories;
-            using (var connexion = new NpgsqlConnection(_connexionString))
-            {
-                Categories = connexion.Query<Categorie>(queryCategories).ToList();
-            }
-            return Categories;
         }
 
 
@@ -562,32 +604,13 @@ namespace ProjectCookBook.Controllers
                     return NotFound();
                 }
 
-                recette = recettes.GroupBy(R => R.id).Select(g =>
-                {
-                    Recette groupedRecette = g.First();
-                    groupedRecette.categories = g.Select(R => R.categories.Single()).ToList();
-                    groupedRecette.etapes = g.Select(R => R.etapes.Single()).ToList();
-                    groupedRecette.ingredients = g.Select(R => R.ingredients.Single()).ToDictionary();
-                    return groupedRecette;
-                }).First();
+                recette = GroupingRecettesByIdForCategoriesAndEtapesAndIngredients(recettes);
 
-                recette.ingredients = recette.ingredients.GroupBy(ing => ing.Key.id).Select(g =>
-                {
-                    KeyValuePair<Ingredient, string> groupedIngredient = g.First();
-                    return groupedIngredient;
-                }).ToDictionary();
+                GoupingIngredients(recette);
 
-                recette.etapes = recette.etapes.GroupBy(E => E.numero).Select(g =>
-                {
-                    Etape groupedEtapes = g.First();
-                    return groupedEtapes;
-                }).ToList();
+                GroupingEtapes(recette);
 
-                recette.categories = recette.categories.GroupBy(C => C.id).Select(g =>
-                {
-                    Categorie groupedCategories = g.First();
-                    return groupedCategories;
-                }).ToList();
+                GroupingCategories(recette);
 
                 recette.id = id;
                 recetteFormViewModel.recette = recette;
@@ -909,7 +932,7 @@ namespace ProjectCookBook.Controllers
             RecetteRechercheViewModel recetteRechercheViewModel = new RecetteRechercheViewModel();
             recetteRechercheViewModel.ingredients = CreationSelectIngredient();
             recetteRechercheViewModel.categories = CreationSelectCategorie();
-            
+
             return View("Search", recetteRechercheViewModel);
         }
 
@@ -965,14 +988,7 @@ namespace ProjectCookBook.Controllers
                 }
             }
 
-            recettesgrouped = recettes.GroupBy(R => R.id).Select(g =>
-            {
-                Recette groupedRecette = g.First();
-
-                groupedRecette.avis = g.SelectMany(R => R.avis).ToList();
-
-                return groupedRecette;
-            }).ToList();
+            recettesgrouped = GroupingRecettesByIdForAvis(recettes);
 
             RecetteRechercheViewModel recetteRechercheViewModel = new RecetteRechercheViewModel();
             recetteRechercheViewModel.ingredients = CreationSelectIngredient();
@@ -1049,14 +1065,7 @@ namespace ProjectCookBook.Controllers
                 }
             }
 
-            recettesgrouped = recettes.GroupBy(R => R.id).Select(g =>
-                        {
-                            Recette groupedRecette = g.First();
-
-                            groupedRecette.avis = g.SelectMany(R => R.avis).ToList();
-
-                            return groupedRecette;
-                        }).ToList();
+            recettesgrouped = GroupingRecettesByIdForAvis(recettes);
 
             RecetteRechercheViewModel recetteRechercheViewModel = new RecetteRechercheViewModel();
             recetteRechercheViewModel.ingredients = CreationSelectIngredient();
@@ -1064,7 +1073,7 @@ namespace ProjectCookBook.Controllers
             recetteRechercheViewModel.recettes = recettesgrouped;
             recetteRechercheViewModel.recherche = Search_Recipe;
 
-            foreach(var recette in recetteRechercheViewModel.recettes)
+            foreach (var recette in recetteRechercheViewModel.recettes)
             {
                 if (recette.avis != null && recette.avis.Any())
                     recette.avisnote = Math.Round(recette.avis.Average(a => a.note), 1);
@@ -1178,14 +1187,7 @@ namespace ProjectCookBook.Controllers
                 }
             }
 
-            recettesgrouped = recettes.GroupBy(R => R.id).Select(g =>
-            {
-                Recette groupedRecette = g.First();
-
-                groupedRecette.avis = g.SelectMany(R => R.avis).ToList();
-
-                return groupedRecette;
-            }).ToList();
+            recettesgrouped = GroupingRecettesByIdForAvis(recettes);
 
             recetteRechercheViewModel.ingredients = CreationSelectIngredient();
             recetteRechercheViewModel.categories = CreationSelectCategorie();
@@ -1208,30 +1210,14 @@ namespace ProjectCookBook.Controllers
             List<Recette> recettes;
             try
             {
-                using (var connexion = new NpgsqlConnection(_connexionString))
-                {
-                    recettes = connexion.Query<Recette, Avis, Recette>(query, (recette, avis) =>
-                    {
-                        recette.avis.Add(avis);
-                        return recette;
-                    },
-                    new { createur = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)) },
-                    splitOn: "id, id_recette").ToList();
-                }
+                t
             }
             catch (Exception)
             {
                 return NotFound();
             }
 
-            recettesgrouped = recettes.GroupBy(R => R.id).Select(g =>
-            {
-                Recette groupedRecette = g.First();
-
-                groupedRecette.avis = g.SelectMany(R => R.avis).ToList();
-
-                return groupedRecette;
-            }).ToList();
+            recettesgrouped = GroupingRecettesByIdForAvis(recettes);
 
 
             return View(recettesgrouped);
