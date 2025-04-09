@@ -3,7 +3,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
-    background-color: var(--Body_Background_Color);
+    background-color: slategray;
 }
 
 form {
@@ -11,8 +11,7 @@ form {
     left: 20vw;
     width: 50vw;
     border: 3px black solid;
-    border-top: 1px var(--Div_Background_Color) solid;
-    background-color: var(--Div_Background_Color);
+    background-color: gray;
 }
 
 ul {
@@ -29,7 +28,7 @@ ul {
         padding: 5px;
         position: relative; /* Nécessaire pour gérer la bordure et le pseudo-élément */
         padding-left: 10px; /* Espace pour laisser place à la puce personnalisée */
-        border: 2px solid #000; /* Bordure autour de l'élément li, incluant la puce et le texte */
+        border: 1px solid #000; /* Bordure autour de l'élément li, incluant la puce et le texte */
         margin-bottom: 10px; /* Espacement entre les éléments de la liste */
         display: flex;
         align-items: center; /* Aligne verticalement le texte et la puce */
@@ -42,6 +41,7 @@ ul {
         }
 
 
-.Connexion input:after {
+.Connexion label:after {
     content: "*";
+    color: red;
 }

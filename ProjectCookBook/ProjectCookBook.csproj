@@ -18,4 +18,8 @@
     <Folder Include="wwwroot\Img\Recettes\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\css\Sign_Up_In.css" />
+  </ItemGroup>
+
 </Project>

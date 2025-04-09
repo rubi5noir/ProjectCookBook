@@ -980,6 +980,14 @@ namespace ProjectCookBook.Controllers
             recetteRechercheViewModel.recettes = recettesgrouped;
             recetteRechercheViewModel.recherche = Search_Recipe;
 
+            foreach (var recette in recetteRechercheViewModel.recettes)
+            {
+                if (recette.avis != null && recette.avis.Any())
+                    recette.avisnote = Math.Round(recette.avis.Average(a => a.note), 1);
+                else
+                    recette.avisnote = 0;
+            }
+
             return Json(recetteRechercheViewModel);
         }
 
