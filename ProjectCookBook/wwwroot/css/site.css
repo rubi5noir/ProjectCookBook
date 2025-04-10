@@ -164,6 +164,11 @@ div.Compte_Vignette {
     margin: 5px;
     border: solid;
     width: 20%;
+    background-color: var(--Div_Background_Color);
+}
+
+div.Compte_Vignette:hover{
+    cursor:pointer;
 }
 
     div.Compte_Vignette > img {

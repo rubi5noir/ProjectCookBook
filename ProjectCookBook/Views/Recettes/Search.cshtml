@@ -18,7 +18,7 @@
 
 <div class="menuFilter" id="menuFilter">
 
-    <form asp-controller="Recettes" asp-action="RechercheFiltrer" method="post">
+    <form asp-controller="Recettes" asp-action="RechercheFiltrer" method="post" id="Filtre">
 
         <input type="hidden" asp-for="recherche" value="@Model.recherche" />
 
@@ -107,7 +107,7 @@
             </div>
         </fieldset>
 
-        <button type="submit">Filtrer</button>
+        <button id="FiltreBtnSubmit">Filtrer</button>
     </form>
 
 </div>

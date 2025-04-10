@@ -146,7 +146,6 @@ function RechercheParCategorie(param) {
     fetch("/Recettes/SearchByCategorie?Search_Recipe=" + encodeURIComponent(param)).then((reponse) => {
         return reponse.json();
     }).then((json) => {
-        console.log(json);
         Body_Recipes.innerHTML = ''; // Vide le contenu précédent
         for (let i = 0; i < json.recettes.length; i++) {
             afficherRecette(json.recettes[i]);
@@ -193,7 +192,6 @@ function Recherche(param) {
     fetch("/Recettes/Search?Search_Recipe=" + encodeURIComponent(chaine)).then((reponse) => {
         return reponse.json();
     }).then((json) => {
-        console.log(json);
         Body_Recipes.innerHTML = ''; // Vide le contenu précédent
         for (let i = 0; i < json.recettes.length; i++) {
             afficherRecette(json.recettes[i]);
@@ -201,7 +199,40 @@ function Recherche(param) {
     });
 }
 
+function RechercheFiltrer(event) {
+    event.preventDefault(); // Empêche le rechargement de la page
 
+    const form = document.getElementById('Filtre');
+    const formData = new FormData(form);
+
+    const recetteRechercheViewModel = {
+        FilterIngredients: formData.getAll("FilterIngredients").map(Number),
+        FilterCategorie: formData.getAll("FilterCategorie").map(Number),
+        TempsOrder: formData.get("TempsOrder"),
+        note: parseInt(formData.get("note")),
+        recherche: formData.get("recherche")
+    };
+
+    Body_Recipes = document.getElementById('Body_Recipes');
+    Label_Recipes_Search = document.getElementById('Label_Recipes_Search')
+
+    fetch("/Recettes/RechercheFiltrer", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(recetteRechercheViewModel)
+    }).then((reponse) => {
+        return reponse.json();
+    }).then((json) => {
+        Body_Recipes.innerHTML = ''; // Vide le contenu précédent
+        for (let i = 0; i < json.recettes.length; i++) {
+            afficherRecette(json.recettes[i]);
+        }
+    });
+}
+boutonSubmitFiltreRecherche = document.getElementById('FiltreBtnSubmit')
+boutonSubmitFiltreRecherche.addEventListener('click', RechercheFiltrer);
 
 function afficherRecette(recette) {
 

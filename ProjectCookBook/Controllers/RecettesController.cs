@@ -13,6 +13,7 @@ using System.Data.Common;
 using System.Data;
 using NpgsqlTypes;
 using System.Reflection;
+using System.Text.Json;
 
 namespace ProjectCookBook.Controllers
 {
@@ -1083,8 +1084,9 @@ namespace ProjectCookBook.Controllers
         /// <param name="recetteRechercheViewModel"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult RechercheFiltrer(RecetteRechercheViewModel recetteRechercheViewModel)
+        public IActionResult RechercheFiltrer([FromBody] RecetteRechercheViewModel recetteRechercheViewModel)
         {
+            
             string queryrechercheutilisateur = "SELECT recettes.id " +
                 "FROM RECETTES " +
                 "INNER JOIN UTILISATEURS ON UTILISATEURS.ID = ID_UTILISATEUR " +
@@ -1207,7 +1209,7 @@ namespace ProjectCookBook.Controllers
             recetteRechercheViewModel.categories = CreationSelectCategorie();
             recetteRechercheViewModel.recettes = GroupingRecettesByIdForAvis(recettes);
 
-            return View("Search", recetteRechercheViewModel);
+            return Json(recetteRechercheViewModel);
         }
 
         /// <summary>
