@@ -39,9 +39,9 @@ fieldset#Titre_Recette_Fieldset {
 
 fieldset {
     width: 60vw;
-    background-color: var(--Header_Background_Color);
+    background-color: var(--Form_Background_Color);
     border: 2px solid;
-    border-color: var(--Header_Border_Color);
+    border-color: var(--Border_Color);
     border-radius: 15px;
     margin: 5px;
 }
@@ -78,7 +78,7 @@ div.Recipe_Step {
     flex-direction: column;
     margin-top: 10px;
     padding: 1px;
-    border: 1px solid;
+    border: 1px solid var(--Border_Color);
 }
 
 
@@ -95,7 +95,7 @@ div.Div_Categorie {
     flex-direction: row;
     margin-top: 10px;
     padding: 1px;
-    border: 1px solid;
+    border: 1px solid var(--Border_Color);
 }
 
 /* select */
@@ -103,7 +103,7 @@ div.Div_Categorie {
 select {
     height: 30px;
     border: 1px solid;
-    border-color: var(--Header_Border_Color);
+    border-color: var(--Border_Color);
     border-radius: 5px;
     margin-right: 20px;
 }

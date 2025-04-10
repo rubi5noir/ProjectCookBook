@@ -67,7 +67,7 @@
         }
     </div>
 
-    <div class="Recipe_Right_Part">
+    <div id="Recipe_Categories" class="Recipe_Right_Part">
         <ul>
             @foreach (Categorie categorie in Model.categories)
             {
@@ -97,7 +97,11 @@
             {
                 <h2>@TempData["ValidateMessage"]</h2>
             }
+
         </form>
+
+
+        <h2>Note Moyenne : @(Model.avis.Any() ? Math.Round(Model.avis.Average(a => a.note), 1) : 0)</h2>
 
         @foreach (Avis avis in Model.avis)
         {

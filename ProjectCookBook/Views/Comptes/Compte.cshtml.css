@@ -7,9 +7,9 @@ div#Personnal_Information {
     position: relative;
     left: 20vw;
     width: 50vw;
-    border: 3px black solid;
-    border-top: 1px var(--Div_Background_Color) solid;
-    background-color: var(--Div_Background_Color);
+    border: 3px var(--Border_Color) solid;
+    border-top: 1px var(--Compte_Info_Background_Color) solid;
+    background-color: var(--Compte_Info_Background_Color);
 }
 
 ul li {
@@ -20,31 +20,31 @@ ul li {
     ul li#identifiant::before {
         content: "Pseudo : ";
         font-weight: bold;
-        color: #333;
+        color: var(--Compte_Info_Titre_Color);
     }
 
     ul li#nom::before {
         content: "Nom : ";
         font-weight: bold;
-        color: #333;
+        color: var(--Compte_Info_Titre_Color);
     }
 
     ul li#prenom::before {
         content: "Prénom : ";
         font-weight: bold;
-        color: #333;
+        color: var(--Compte_Info_Titre_Color);
     }
 
     ul li#email::before {
         content: "Email : ";
         font-weight: bold;
-        color: #333;
+        color: var(--Compte_Info_Titre_Color);
     }
 
     ul li#role::before {
         content: "Role : ";
         font-weight: bold;
-        color: #333;
+        color: var(--Compte_Info_Titre_Color);
     }
 
 

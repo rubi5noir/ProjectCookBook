@@ -207,6 +207,17 @@ div.Compte_Vignette:hover{
     --Display_Image: block;
     --Header_Border_Color: black;
     --Div_Background_Color: rgba(255, 255, 255, 0.933);
+    --Footer_Background_Color: rgba(255, 255, 255, 0.933);
+    --Footer_Copyright_Span_Color: grey;
+    --Border_Color: black;
+    --Form_Background_Color: rgba(193, 192, 192, 0.933);
+    --Recipe_Part_Background_Color: rgb(201 201 201);
+    --Recipe_Etapes_Background_Color: rgba(255, 255, 255, 0.933);
+    --Recipe_Ingredients_Background_Color: rgba(255, 255, 255, 0.933);
+    --Recipe_Avis_Background_Color: rgba(255, 255, 255, 0.933);
+    --Recipe_Star_Color: yellow;
+    --Compte_Info_Titre_Color: #333;
+    --Compte_Info_Background_Color: rgba(255, 255, 255, 0.933);
 }
 
 .Dark {
@@ -223,6 +234,17 @@ div.Compte_Vignette:hover{
     --Display_Image: block;
     --Header_Border_Color: black;
     --Div_Background_Color: gray;
+    --Footer_Background_Color: darkgrey;
+    --Footer_Copyright_Span_Color: grey;
+    --Border_Color: black;
+    --Form_Background_Color: gray;
+    --Recipe_Part_Background_Color: dimgray;
+    --Recipe_Etapes_Background_Color: gray;
+    --Recipe_Ingredients_Background_Color: gray;
+    --Recipe_Avis_Background_Color: gray;
+    --Recipe_Star_Color: yellow;
+    --Compte_Info_Titre_Color: #333;
+    --Compte_Info_Background_Color: gray;
 }
 
 .Rubisnoir {
@@ -236,7 +258,17 @@ div.Compte_Vignette:hover{
     --Recipe_Categorie_Background_Color: rgb(174, 114, 9);
     --Recipe_Book_Background_Color: rgb(52, 52, 52);
     --Recipe_Book_Background_Image: none;
-    --Display_Image: none;
     --Header_Border_Color: black;
     --Div_Background_Color: rgb(167, 15, 15);
+    --Footer_Background_Color: rgb(167, 15, 15);
+    --Footer_Copyright_Span_Color: gold;
+    --Border_Color: black;
+    --Form_Background_Color: rgb(167, 15, 15);
+    --Recipe_Part_Background_Color: rgb(186 50 50);
+    --Recipe_Etapes_Background_Color: rgb(167, 15, 15);
+    --Recipe_Ingredients_Background_Color: rgb(167, 15, 15);
+    --Recipe_Avis_Background_Color: rgb(167, 15, 15);
+    --Recipe_Star_Color: yellow;
+    --Compte_Info_Titre_Color: gold;
+    --Compte_Info_Background_Color: rgb(167, 15, 15);
 }

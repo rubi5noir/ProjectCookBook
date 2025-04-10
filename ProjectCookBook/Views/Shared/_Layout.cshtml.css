@@ -172,7 +172,7 @@ button#Header_Account_Button {
 
 /*Footer*/
 div#Footer {
-    background-color: darkgrey;
+    background-color: var(--Footer_Background_Color);
     position: relative;
     display: flex;
     flex-wrap: wrap;
@@ -196,7 +196,7 @@ hr {
 
 div#copyright {
     width: 100vw;
-    border-top: 2px solid grey;
+    border-top: 2px solid var(--Footer_Copyright_Span_Color);
     padding-top: 3px;
 }
 
@@ -209,7 +209,7 @@ img#Logo_Copyright {
 
     /* Search Bar */
     div#Header_Search_Bar {
-        border-right: solid;
+        border-right: solid var(--Header_Border_Color);
         justify-content: right;
         right: 0%;
     }

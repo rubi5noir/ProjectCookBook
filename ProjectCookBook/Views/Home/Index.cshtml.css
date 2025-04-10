@@ -14,8 +14,7 @@ div.Scroll_Width_Div {
     scroll-behavior: smooth;
     padding: 10px 0;
     gap: 10px;
-    width: 100%; /* S'adapte au parent */
-    /*white-space: nowrap;*/ /* Empêche les éléments de passer à la ligne */
+    width: 100%;
     scrollbar-width: thin;
 }
 

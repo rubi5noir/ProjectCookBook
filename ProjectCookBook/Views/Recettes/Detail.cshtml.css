@@ -21,11 +21,11 @@ div.Recipe_Right_Part {
 }
 
 .Recipe_Part {
-    border: 2px solid black;
+    border: 2px solid var(--Border_Color);
     margin: 5px;
     padding: 5px;
     border-radius: 20px;
-    background-color: dimgray;
+    background-color: var(--Recipe_Part_Background_Color);
 }
 
 #Recipe_Image > * {
@@ -41,19 +41,33 @@ ul {
     ul li {
         position: relative; /* Nécessaire pour gérer la bordure et le pseudo-élément */
         padding-left: 10px; /* Espace pour laisser place à la puce personnalisée */
-        border: 2px solid #000; /* Bordure autour de l'élément li, incluant la puce et le texte */
+        border: 2px solid var(--Border_Color); /* Bordure autour de l'élément li, incluant la puce et le texte */
         margin-bottom: 10px; /* Espacement entre les éléments de la liste */
         display: flex;
         align-items: center; /* Aligne verticalement le texte et la puce */
         border-radius: 20px;
-        background-color: darkgray;
     }
 
-        ul li::marker {
-            color: #000;
-            font-size: 18px;
-            font-weight: bold;
-        }
+#Recipe_Steps ul li {
+    background-color: var(--Recipe_Etapes_Background_Color);
+}
+
+#Recipe_Info_Preparation ul li {
+    background-color: var(--Recipe_Ingredients_Background_Color);
+}
+
+#Recipe_Categories ul li {
+    background-color: var(--Recipe_Categorie_Background_Color);
+}
+
+#Rating ul li {
+    background-color: var(--Recipe_Avis_Background_Color);
+}
+
+ul li::marker {
+    font-size: 18px;
+    font-weight: bold;
+}
 
 div.Recipe_Step {
     margin-right: 15px;
@@ -65,13 +79,14 @@ div.Rating {
     display: flex;
     flex-wrap: wrap;
     width: 55vw;
-    background-color: darkgray;
+    background-color: var(--Recipe_Avis_Background_Color);
     clip-path: none;
     height: auto;
     position: relative;
     padding-left: 20px;
-    border: solid;
+    border: solid var(--Border_Color);
     border-radius: 20px;
+    margin-bottom: 5px;
 }
 
     div.Rating > div {
@@ -84,7 +99,7 @@ h2.Rating {
     margin-right: 5px;
     position: relative;
     clip-path: none;
-    background-color: darkgray;
+    background-color: var(--Recipe_Avis_Background_Color);
 }
 
 h3.Rating {
