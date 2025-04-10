@@ -35,13 +35,5 @@ namespace ProjectCookBook.Models
         public string aviscommentaire { get; set; }
         public double avisnote { get; set; }
 
-        public List<SelectListItem> noteselectlist = new List<SelectListItem> {
-            new SelectListItem { Value = "0", Text = "0" },
-            new SelectListItem { Value = "1", Text = "1" },
-            new SelectListItem { Value = "2", Text = "2" },
-            new SelectListItem { Value = "3", Text = "3" },
-            new SelectListItem { Value = "4", Text = "4" },
-            new SelectListItem { Value = "5", Text = "5" }
-            };
     }
 }

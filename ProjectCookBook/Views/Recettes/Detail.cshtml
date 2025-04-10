@@ -1,6 +1,6 @@
 ﻿@model Recette
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+<partial name="_ValidationScriptsPartial" />
 }
 
 <div id="Recipe">
@@ -85,12 +85,13 @@
     <div id="Rating" class="Recipe_Left_Part">
         <h2>Ajouter un Avis</h2>
         <form asp-controller="Recettes" asp-action="AjouterAvis" method="post">
-            <select asp-for="avisnote">
-                @foreach (var note in Model.noteselectlist)
-                {
-                    <option value="@note.Value">@note.Text</option>
-                }
-            </select>
+            <input asp-for="avisnote" type="hidden" value="0">
+            <div id="RatingChoice">
+            @for (var i = 1; i < 6; i++)
+            {
+                <h3 class="Rating_Choice" id="Star_@i"></h3>
+            }
+            </div>
             <textarea asp-for="@Model.aviscommentaire"></textarea>
             <input type="submit" value="Valider">
             @if (TempData["ValidateMessage"] is not null)

@@ -111,7 +111,23 @@ function ClickOnCategorie(event) {
 }
 
 
+document.querySelectorAll(".Rating_Choice").forEach(h3 => {
+    h3.addEventListener("click", function () {
+        var valeur = h3.id.substring(5);
+        avisnote = document.getElementById("avisnote").value = valeur;
 
+
+        document.querySelectorAll(".Rating_Choice").forEach(star => {
+            const starValue = parseInt(star.id.substring(5));
+            if (starValue <= valeur) {
+                star.classList.add("active");
+            }
+            else {
+                star.classList.remove("active");
+            }
+        });
+    });
+});
 
 
 

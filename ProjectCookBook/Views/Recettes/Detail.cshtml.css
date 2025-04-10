@@ -108,6 +108,34 @@ h3.Rating {
     position: relative;
 }
 
+h3.Rating_Choice {
+    position: relative;
+    top: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+    margin-top: 0px;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    background-color: rgba(255, 215, 0, 0.5);
+}
+
+    h3.Rating_Choice:hover {
+        scale: 1.5;
+        background-color: rgba(255, 215, 0, 1);
+        cursor: pointer;
+    }
+
+    h3.Rating_Choice.active {
+        background-color: rgba(255, 215, 0, 1);
+    }
+
+    div#RatingChoice{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        width: 55vw;
+    }
+
 h2.Rating, h3.Rating {
     display: inline-block;
 }
@@ -115,5 +143,12 @@ h2.Rating, h3.Rating {
 @media (max-width: 426px) {
     div.Rating {
         width: 80vw;
+    }
+}
+
+@media (min-width: 427px)
+{
+    div#RatingChoice {
+        width: 50%;
     }
 }
