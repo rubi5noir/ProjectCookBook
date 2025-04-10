@@ -1205,11 +1205,7 @@ namespace ProjectCookBook.Controllers
                 }
             }
 
-            recetteRechercheViewModel.ingredients = CreationSelectIngredient();
-            recetteRechercheViewModel.categories = CreationSelectCategorie();
-            recetteRechercheViewModel.recettes = GroupingRecettesByIdForAvis(recettes);
-
-            return Json(recetteRechercheViewModel);
+            return Json(GroupingRecettesByIdForAvis(recettes));
         }
 
         /// <summary>
